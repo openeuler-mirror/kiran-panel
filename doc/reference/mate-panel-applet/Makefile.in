@@ -362,7 +362,7 @@ top_srcdir = @top_srcdir@
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module, e.g. 'glib'.
-DOC_MODULE = mate-panel-applet
+DOC_MODULE = kiran-panel-applet
 
 # The top-level SGML file. Change it if you want.
 DOC_MAIN_SGML_FILE = $(DOC_MODULE)-docs.sgml
@@ -415,7 +415,7 @@ GTKDOC_CFLAGS = \
 GTKDOC_LIBS = \
 	$(LDFLAGS)					\
 	$(PANEL_LIBS)					\
-	../../../libmate-panel-applet/libmate-panel-applet-4.la
+	../../../libmate-panel-applet/libkiran-panel-applet-4.la
 
 @GTK_DOC_USE_LIBTOOL_FALSE@GTKDOC_CC = $(CC) $(INCLUDES) $(GTKDOC_DEPS_CFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
 @GTK_DOC_USE_LIBTOOL_TRUE@GTKDOC_CC = $(LIBTOOL) --tag=CC --mode=compile $(CC) $(INCLUDES) $(GTKDOC_DEPS_CFLAGS) $(AM_CPPFLAGS) $(CPPFLAGS) $(AM_CFLAGS) $(CFLAGS)
@@ -795,7 +795,6 @@ html-build.stamp: sgml.stamp $(DOC_MAIN_SGML_FILE) $(content_files) $(expand_con
 	for file in $(HTML_IMAGES) ; do \
 	  test -f $(abs_srcdir)/$$file && cp $(abs_srcdir)/$$file $(abs_builddir)/html; \
 	  test -f $(abs_builddir)/$$file && cp $(abs_builddir)/$$file $(abs_builddir)/html; \
-	  test -f $$file && cp $$file $(abs_builddir)/html; \
 	done;
 	$(GTK_DOC_V_XREF)gtkdoc-fixxref --module=$(DOC_MODULE) --module-dir=html --html-dir=$(HTML_DIR) $(FIXXREF_OPTIONS)
 	$(AM_V_at)touch html-build.stamp

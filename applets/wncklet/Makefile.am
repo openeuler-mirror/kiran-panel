@@ -24,7 +24,7 @@ WNCKLET_SOURCES = \
 	$(BUILT_SOURCES)
 
 WNCKLET_LDADD =						\
-	../../libmate-panel-applet/libmate-panel-applet-4.la	\
+	../../libmate-panel-applet/libkiran-panel-applet-4.la	\
 	$(WNCKLET_LIBS)					\
 	$(LIBMATE_PANEL_APPLET_LIBS)
 
@@ -48,7 +48,7 @@ wnck_applet_LDADD = $(WNCKLET_LDADD)
 wnck_applet_CFLAGS = $(AM_CFLAGS)
 endif
 
-appletdir       = $(datadir)/mate-panel/applets
+appletdir       = $(datadir)/kiran-panel/applets
 applet_in_files = org.mate.panel.Wncklet.mate-panel-applet.in
 applet_DATA     = $(applet_in_files:.mate-panel-applet.in=.mate-panel-applet)
 
@@ -63,10 +63,10 @@ $(applet_in_files): $(applet_in_files).in Makefile
 
 if !WNCKLET_INPROCESS
 servicedir       = $(datadir)/dbus-1/services
-service_in_files = org.mate.panel.applet.WnckletFactory.service.in
+service_in_files = org.kiran.panel.applet.WnckletFactory.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
 
-org.mate.panel.applet.WnckletFactory.service: $(service_in_files)
+org.kiran.panel.applet.WnckletFactory.service: $(service_in_files)
 	$(AM_V_GEN)sed \
 		-e "s|\@LOCATION\@|$(APPLET_LOCATION)|" \
 		$< > $@
@@ -91,8 +91,8 @@ BUILT_SOURCES = 		\
 	wncklet-resources.h
 
 wncklet_gschemas_in = \
-	org.mate.panel.applet.window-list.gschema.xml.in \
-	org.mate.panel.applet.workspace-switcher.gschema.xml.in
+	org.kiran.panel.applet.window-list.gschema.xml.in \
+	org.kiran.panel.applet.workspace-switcher.gschema.xml.in
 gsettings_SCHEMAS = $(wncklet_gschemas_in:.xml.in=.xml)
 
 @INTLTOOL_XML_NOMERGE_RULE@

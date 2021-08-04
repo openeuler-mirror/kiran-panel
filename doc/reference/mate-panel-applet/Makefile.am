@@ -3,7 +3,7 @@
 AUTOMAKE_OPTIONS = 1.6
 
 # The name of the module, e.g. 'glib'.
-DOC_MODULE=mate-panel-applet
+DOC_MODULE=kiran-panel-applet
 
 # The top-level SGML file. Change it if you want.
 DOC_MAIN_SGML_FILE=$(DOC_MODULE)-docs.sgml
@@ -55,7 +55,7 @@ GTKDOC_CFLAGS =					\
 GTKDOC_LIBS =						\
 	$(LDFLAGS)					\
 	$(PANEL_LIBS)					\
-	../../../libmate-panel-applet/libmate-panel-applet-4.la
+	../../../libmate-panel-applet/libkiran-panel-applet-4.la
 
 include $(top_srcdir)/gtk-doc.make
 

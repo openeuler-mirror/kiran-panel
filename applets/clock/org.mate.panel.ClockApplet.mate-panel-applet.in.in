@@ -8,7 +8,7 @@ _Description=Factory for clock applet
 [ClockApplet]
 _Name=Clock
 _Description=Get the current time and date
-Icon=mate-panel-clock
+Icon=kiran-panel-clock
 MateComponentId=OAFIID:MATE_ClockApplet;
 X-MATE-Bugzilla-Bugzilla=MATE
 X-MATE-Bugzilla-Product=mate-panel

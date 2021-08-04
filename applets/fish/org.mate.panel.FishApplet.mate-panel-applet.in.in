@@ -8,7 +8,7 @@ _Description=From Whence That Stupid Fish Came
 [FishApplet]
 _Name=Fish
 _Description=Display a swimming fish or another animated creature
-Icon=mate-panel-fish
+Icon=kiran-panel-fish
 MateComponentId=OAFIID:MATE_FishApplet;
 X-MATE-Bugzilla-Bugzilla=MATE
 X-MATE-Bugzilla-Product=mate-panel

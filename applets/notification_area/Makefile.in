@@ -105,7 +105,7 @@ DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
 CONFIG_CLEAN_FILES =  \
-	org.mate.panel.applet.notification-area.gschema.xml
+	org.kiran.panel.applet.notification-area.gschema.xml
 CONFIG_CLEAN_VPATH_FILES =
 am__installdirs = "$(DESTDIR)$(libexecdir)" \
 	"$(DESTDIR)$(notification_area_appletlibdir)" \
@@ -142,7 +142,7 @@ LTLIBRARIES = $(noinst_LTLIBRARIES) \
 	$(notification_area_appletlib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
 am__DEPENDENCIES_2 =  \
-	../../libmate-panel-applet/libmate-panel-applet-4.la \
+	../../libmate-panel-applet/libkiran-panel-applet-4.la \
 	libtray.la $(am__DEPENDENCIES_1) $(am__DEPENDENCIES_1)
 @NOTIFICATION_AREA_INPROCESS_TRUE@libnotification_area_applet_la_DEPENDENCIES =  \
 @NOTIFICATION_AREA_INPROCESS_TRUE@	$(am__DEPENDENCIES_2)
@@ -282,7 +282,7 @@ ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
-	$(srcdir)/org.mate.panel.applet.notification-area.gschema.xml.in \
+	$(srcdir)/org.kiran.panel.applet.notification-area.gschema.xml.in \
 	$(top_srcdir)/depcomp
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
@@ -559,7 +559,7 @@ NOTIFICATION_AREA_SOURCES = \
 	$(BUILT_SOURCES)
 
 NOTIFICATION_AREA_LDADD = \
-	../../libmate-panel-applet/libmate-panel-applet-4.la	\
+	../../libmate-panel-applet/libkiran-panel-applet-4.la	\
 	libtray.la \
 	$(NOTIFICATION_AREA_LIBS)			\
 	$(LIBMATE_PANEL_APPLET_LIBS)
@@ -582,13 +582,13 @@ testtray_LDADD = \
 @NOTIFICATION_AREA_INPROCESS_FALSE@notification_area_applet_SOURCES = $(NOTIFICATION_AREA_SOURCES)
 @NOTIFICATION_AREA_INPROCESS_FALSE@notification_area_applet_LDADD = $(NOTIFICATION_AREA_LDADD)
 @NOTIFICATION_AREA_INPROCESS_FALSE@notification_area_applet_CFLAGS = $(AM_CFLAGS)
-appletdir = $(datadir)/mate-panel/applets
+appletdir = $(datadir)/kiran-panel/applets
 applet_in_files = org.mate.panel.NotificationAreaApplet.mate-panel-applet.in
 applet_DATA = $(applet_in_files:.mate-panel-applet.in=.mate-panel-applet)
 @NOTIFICATION_AREA_INPROCESS_FALSE@servicedir = $(datadir)/dbus-1/services
-@NOTIFICATION_AREA_INPROCESS_FALSE@service_in_files = org.mate.panel.applet.NotificationAreaAppletFactory.service.in
+@NOTIFICATION_AREA_INPROCESS_FALSE@service_in_files = org.kiran.panel.applet.NotificationAreaAppletFactory.service.in
 @NOTIFICATION_AREA_INPROCESS_FALSE@service_DATA = $(service_in_files:.service.in=.service)
-notification_area_gschemas_in = org.mate.panel.applet.notification-area.gschema.xml.in
+notification_area_gschemas_in = org.kiran.panel.applet.notification-area.gschema.xml.in
 gsettings_SCHEMAS = $(notification_area_gschemas_in:.xml.in=.xml)
 ui_FILES = \
 	notification-area-preferences-dialog.ui	\
@@ -645,7 +645,7 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-org.mate.panel.applet.notification-area.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.mate.panel.applet.notification-area.gschema.xml.in
+org.kiran.panel.applet.notification-area.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.kiran.panel.applet.notification-area.gschema.xml.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 install-libexecPROGRAMS: $(libexec_PROGRAMS)
 	@$(NORMAL_INSTALL)
@@ -788,22 +788,25 @@ $(am__depfiles_remade):
 am--depfiles: $(am__depfiles_remade)
 
 .c.o:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ $<
 
 .c.obj:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 .c.lo:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
@@ -1224,7 +1227,7 @@ $(applet_in_files): $(applet_in_files).in Makefile
 
 @PANEL_INTLTOOL_MATE_PANEL_APPLET_RULE@
 
-@NOTIFICATION_AREA_INPROCESS_FALSE@org.mate.panel.applet.NotificationAreaAppletFactory.service: $(service_in_files)
+@NOTIFICATION_AREA_INPROCESS_FALSE@org.kiran.panel.applet.NotificationAreaAppletFactory.service: $(service_in_files)
 @NOTIFICATION_AREA_INPROCESS_FALSE@	$(AM_V_GEN)sed \
 @NOTIFICATION_AREA_INPROCESS_FALSE@		-e "s|\@LOCATION\@|$(APPLET_LOCATION)|" \
 @NOTIFICATION_AREA_INPROCESS_FALSE@		$< > $@

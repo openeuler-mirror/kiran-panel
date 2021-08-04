@@ -84,9 +84,9 @@ main (int argc, char **argv)
 	/* We will register explicitly when we're ready -- see panel-session.c */
 	egg_sm_client_set_mode (EGG_SM_CLIENT_MODE_DISABLED);
 
-	g_set_prgname ("mate-panel");
+	g_set_prgname ("kiran-panel");
 
-	desktopfile = panel_g_lookup_in_applications_dirs ("mate-panel.desktop");
+	desktopfile = panel_g_lookup_in_applications_dirs ("kiran-panel.desktop");
 	if (desktopfile) {
 		egg_set_desktop_file (desktopfile);
 		g_free (desktopfile);

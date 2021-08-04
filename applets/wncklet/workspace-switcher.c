@@ -35,7 +35,7 @@
 #define MAX_REASONABLE_ROWS 16
 #define DEFAULT_ROWS 1
 
-#define WORKSPACE_SWITCHER_SCHEMA "org.mate.panel.applet.workspace-switcher"
+#define WORKSPACE_SWITCHER_SCHEMA "org.kiran.panel.applet.workspace-switcher"
 
 #define NEVER_SENSITIVE "never_sensitive"
 #define MARCO_GENERAL_SCHEMA "org.mate.Marco.general"
@@ -43,7 +43,7 @@
 #define MARCO_WORKSPACES_SCHEMA "org.mate.Marco.workspace-names"
 #define WORKSPACE_NAME "name-1"
 
-#define WORKSPACE_SWITCHER_ICON "mate-panel-workspace-switcher"
+#define WORKSPACE_SWITCHER_ICON "kiran-panel-workspace-switcher"
 
 typedef enum {
 	PAGER_WM_MARCO,

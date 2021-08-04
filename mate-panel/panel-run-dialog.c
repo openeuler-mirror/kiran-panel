@@ -113,7 +113,7 @@ static PanelRunDialog *static_dialog = NULL;
 
 static void panel_run_dialog_disconnect_pixmap (PanelRunDialog *dialog);
 
-#define PANEL_RUN_SCHEMA "org.mate.panel"
+#define PANEL_RUN_SCHEMA "org.kiran.panel"
 #define PANEL_RUN_HISTORY_KEY "history-mate-run"
 #define PANEL_RUN_HISTORY_MAX_SIZE_KEY "history-max-size-mate-run"
 #define PANEL_RUN_HISTORY_REVERSE_KEY "history-reverse-mate-run"

@@ -26,7 +26,7 @@
 
 #define NA_RESOURCE_PATH "/org/mate/panel/applet/na/"
 
-#define NA_TRAY_SCHEMA                  "org.mate.panel.applet.notification-area"
+#define NA_TRAY_SCHEMA                  "org.kiran.panel.applet.notification-area"
 #define KEY_MIN_ICON_SIZE               "min-icon-size"
 
 G_BEGIN_DECLS

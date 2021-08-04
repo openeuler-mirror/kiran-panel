@@ -1,7 +1,7 @@
 <schemalist gettext-domain="@GETTEXT_PACKAGE@">
-  <schema id="org.mate.panel" path="/org/mate/panel/general/">
+  <schema id="org.kiran.panel" path="/org/kiran/panel/general/">
     <key name="default-layout" type="s">
-      <default>'default'</default>
+      <default>'unikylin'</default>
       <summary>Default panel layout</summary>
       <description>The default panels layout to use when panels are created or resetted.</description>
     </key>

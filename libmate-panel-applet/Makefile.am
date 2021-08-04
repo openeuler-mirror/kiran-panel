@@ -1,4 +1,4 @@
-lib_LTLIBRARIES = libmate-panel-applet-4.la
+lib_LTLIBRARIES = libkiran-panel-applet-4.la
 noinst_PROGRAMS = test-dbus-applet
 
 AM_CPPFLAGS =							\
@@ -9,13 +9,13 @@ AM_CPPFLAGS =							\
 
 AM_CFLAGS = $(WARN_CFLAGS)
 
-libmate_panel_appletincludedir = $(includedir)/mate-panel-4.0/libmate-panel-applet
-libmate_panel_appletinclude_HEADERS =	\
+libkiran_panel_appletincludedir = $(includedir)/kiran-panel-4.0/libkiran-panel-applet
+libkiran_panel_appletinclude_HEADERS =	\
 	mate-panel-applet.h			\
 	mate-panel-applet-gsettings.h		\
 	mate-panel-applet-enums.h
 
-libmate_panel_applet_4_la_SOURCES =		\
+libkiran_panel_applet_4_la_SOURCES =		\
 	$(BUILT_SOURCES)		\
 	mate-panel-applet.h			\
 	mate-panel-applet.c			\
@@ -26,24 +26,24 @@ libmate_panel_applet_4_la_SOURCES =		\
 	panel-applet-private.h
 
 if ENABLE_X11
-libmate_panel_applet_4_la_SOURCES +=	\
+libkiran_panel_applet_4_la_SOURCES +=	\
 	panel-plug.c			\
 	panel-plug-private.h
 endif
 
-libmate_panel_applet_4_la_LIBADD  = \
+libkiran_panel_applet_4_la_LIBADD  = \
 	$(LIBMATE_PANEL_APPLET_LIBS) \
 	$(X_LIBS)
 
-libmate_panel_applet_4_la_LDFLAGS = \
+libkiran_panel_applet_4_la_LDFLAGS = \
 	-version-info $(LIB_MATE_PANEL_APPLET_LT_VERSION)	\
 	-no-undefined
 
 test_dbus_applet_LDADD =	\
 	$(LIBMATE_PANEL_APPLET_LIBS)	\
-	libmate-panel-applet-4.la
+	libkiran-panel-applet-4.la
 
-$(libmate_panel_applet_4_la_OBJECTS) $(test_dbus_applet_OBJECTS): $(BUILT_SOURCES)
+$(libkiran_panel_applet_4_la_OBJECTS) $(test_dbus_applet_OBJECTS): $(BUILT_SOURCES)
 
 mate-panel-applet-marshal.h: mate-panel-applet-marshal.list $(GLIB_GENMARSHAL)
 	$(AM_V_GEN)$(GLIB_GENMARSHAL) $< --header --prefix=mate_panel_applet_marshal > $@
@@ -89,9 +89,9 @@ BUILT_SOURCES = \
 	mate-panel-applet-marshal.h
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libmatepanelapplet-4.0.pc
+pkgconfig_DATA = libkiranpanelapplet-4.0.pc
 
-appletdir       = $(datadir)/mate-panel/applets
+appletdir       = $(datadir)/kiran-panel/applets
 applet_in_files = org.mate.panel.TestApplet.mate-panel-applet.in
 noinst_DATA     = $(applet_in_files:.mate-panel-applet.in=.mate-panel-applet)
 
@@ -100,8 +100,8 @@ noinst_DATA     = $(applet_in_files:.mate-panel-applet.in=.mate-panel-applet)
 EXTRA_DIST =						\
 	org.mate.panel.TestApplet.mate-panel-applet.in	\
 	mate-panel-applet-marshal.list			\
-	libmatepanelapplet-4.0.pc.in			\
-	libmatepanelapplet-4.0-uninstalled.pc.in
+	libkiranpanelapplet-4.0.pc.in			\
+	libkiranpanelapplet-4.0-uninstalled.pc.in
 
 CLEANFILES = $(BUILT_SOURCES) $(noinst_DATA)
 
@@ -123,15 +123,15 @@ built_introspection_sources =	\
 	mate-panel-applet-enums.c	\
 	mate-panel-applet-enums.h
 
-MatePanelApplet-4.0.gir: libmate-panel-applet-4.la
-MatePanelApplet_4_0_gir_INCLUDES = GObject-2.0 Gtk-3.0 Gio-2.0
-MatePanelApplet_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -I$(srcdir)
-MatePanelApplet_4_0_gir_LIBS = libmate-panel-applet-4.la
-MatePanelApplet_4_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources)) $(addprefix $(builddir)/,$(built_introspection_sources))
+KiranPanelApplet-4.0.gir: libkiran-panel-applet-4.la
+KiranPanelApplet_4_0_gir_INCLUDES = GObject-2.0 Gtk-3.0 Gio-2.0
+KiranPanelApplet_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -I$(srcdir)
+KiranPanelApplet_4_0_gir_LIBS = libkiran-panel-applet-4.la
+KiranPanelApplet_4_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources)) $(addprefix $(builddir)/,$(built_introspection_sources))
 # When requiring gobject-introspection 0.9.5, use this:
-#MatePanelApplet_4_0_gir_SCANNERFLAGS = --identifier-prefix=Panel --symbol-prefix=panel --pkg-export=libmatepanelapplet-4.0
-MatePanelApplet_4_0_gir_SCANNERFLAGS = --strip-prefix=MatePanel --pkg-export=libmatepanelapplet-4.0
-INTROSPECTION_GIRS += MatePanelApplet-4.0.gir
+#MatePanelApplet_4_0_gir_SCANNERFLAGS = --identifier-prefix=Panel --symbol-prefix=panel --pkg-export=libkiranpanelapplet-4.0
+KiranPanelApplet_4_0_gir_SCANNERFLAGS = --strip-prefix=MatePanel --pkg-export=libkiranpanelapplet-4.0
+INTROSPECTION_GIRS += KiranPanelApplet-4.0.gir
 
 girdir = $(INTROSPECTION_GIRDIR)
 gir_DATA = $(INTROSPECTION_GIRS)

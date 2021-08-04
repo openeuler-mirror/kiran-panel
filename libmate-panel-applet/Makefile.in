@@ -96,7 +96,7 @@ noinst_PROGRAMS = test-dbus-applet$(EXEEXT)
 @ENABLE_X11_TRUE@	panel-plug.c			\
 @ENABLE_X11_TRUE@	panel-plug-private.h
 
-@HAVE_INTROSPECTION_TRUE@am__append_2 = MatePanelApplet-4.0.gir
+@HAVE_INTROSPECTION_TRUE@am__append_2 = KiranPanelApplet-4.0.gir
 @HAVE_INTROSPECTION_TRUE@am__append_3 = $(gir_DATA) $(typelib_DATA)
 subdir = libmate-panel-applet
 ACLOCAL_M4 = $(top_srcdir)/aclocal.m4
@@ -108,11 +108,11 @@ am__aclocal_m4_deps = $(top_srcdir)/m4/d-type.m4 \
 am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 	$(ACLOCAL_M4)
 DIST_COMMON = $(srcdir)/Makefile.am \
-	$(libmate_panel_appletinclude_HEADERS) $(am__DIST_COMMON)
+	$(libkiran_panel_appletinclude_HEADERS) $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = libmatepanelapplet-4.0.pc \
-	libmatepanelapplet-4.0-uninstalled.pc
+CONFIG_CLEAN_FILES = libkiranpanelapplet-4.0.pc \
+	libkiranpanelapplet-4.0-uninstalled.pc
 CONFIG_CLEAN_VPATH_FILES =
 PROGRAMS = $(noinst_PROGRAMS)
 am__vpath_adj_setup = srcdirstrip=`echo "$(srcdir)" | sed 's|.|.|g'`;
@@ -144,12 +144,12 @@ am__uninstall_files_from_dir = { \
   }
 am__installdirs = "$(DESTDIR)$(libdir)" "$(DESTDIR)$(girdir)" \
 	"$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(typelibdir)" \
-	"$(DESTDIR)$(libmate_panel_appletincludedir)"
+	"$(DESTDIR)$(libkiran_panel_appletincludedir)"
 LTLIBRARIES = $(lib_LTLIBRARIES)
 am__DEPENDENCIES_1 =
-libmate_panel_applet_4_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
+libkiran_panel_applet_4_la_DEPENDENCIES = $(am__DEPENDENCIES_1) \
 	$(am__DEPENDENCIES_1)
-am__libmate_panel_applet_4_la_SOURCES_DIST =  \
+am__libkiran_panel_applet_4_la_SOURCES_DIST =  \
 	mate-panel-applet-enums.c mate-panel-applet-enums.h \
 	mate-panel-applet-marshal.c mate-panel-applet-marshal.h \
 	mate-panel-applet.h mate-panel-applet.c \
@@ -159,23 +159,23 @@ am__libmate_panel_applet_4_la_SOURCES_DIST =  \
 am__objects_1 = mate-panel-applet-enums.lo \
 	mate-panel-applet-marshal.lo
 @ENABLE_X11_TRUE@am__objects_2 = panel-plug.lo
-am_libmate_panel_applet_4_la_OBJECTS = $(am__objects_1) \
+am_libkiran_panel_applet_4_la_OBJECTS = $(am__objects_1) \
 	mate-panel-applet.lo mate-panel-applet-factory.lo \
 	mate-panel-applet-gsettings.lo $(am__objects_2)
-libmate_panel_applet_4_la_OBJECTS =  \
-	$(am_libmate_panel_applet_4_la_OBJECTS)
+libkiran_panel_applet_4_la_OBJECTS =  \
+	$(am_libkiran_panel_applet_4_la_OBJECTS)
 AM_V_lt = $(am__v_lt_@AM_V@)
 am__v_lt_ = $(am__v_lt_@AM_DEFAULT_V@)
 am__v_lt_0 = --silent
 am__v_lt_1 = 
-libmate_panel_applet_4_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
+libkiran_panel_applet_4_la_LINK = $(LIBTOOL) $(AM_V_lt) --tag=CC \
 	$(AM_LIBTOOLFLAGS) $(LIBTOOLFLAGS) --mode=link $(CCLD) \
-	$(AM_CFLAGS) $(CFLAGS) $(libmate_panel_applet_4_la_LDFLAGS) \
+	$(AM_CFLAGS) $(CFLAGS) $(libkiran_panel_applet_4_la_LDFLAGS) \
 	$(LDFLAGS) -o $@
 test_dbus_applet_SOURCES = test-dbus-applet.c
 test_dbus_applet_OBJECTS = test-dbus-applet.$(OBJEXT)
 test_dbus_applet_DEPENDENCIES = $(am__DEPENDENCIES_1) \
-	libmate-panel-applet-4.la
+	libkiran-panel-applet-4.la
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
 am__v_P_0 = false
@@ -216,8 +216,8 @@ AM_V_CCLD = $(am__v_CCLD_@AM_V@)
 am__v_CCLD_ = $(am__v_CCLD_@AM_DEFAULT_V@)
 am__v_CCLD_0 = @echo "  CCLD    " $@;
 am__v_CCLD_1 = 
-SOURCES = $(libmate_panel_applet_4_la_SOURCES) test-dbus-applet.c
-DIST_SOURCES = $(am__libmate_panel_applet_4_la_SOURCES_DIST) \
+SOURCES = $(libkiran_panel_applet_4_la_SOURCES) test-dbus-applet.c
+DIST_SOURCES = $(am__libkiran_panel_applet_4_la_SOURCES_DIST) \
 	test-dbus-applet.c
 am__can_run_installinfo = \
   case $$AM_UPDATE_INFO_DIR in \
@@ -225,7 +225,7 @@ am__can_run_installinfo = \
     *) (install-info --version) >/dev/null 2>&1;; \
   esac
 DATA = $(gir_DATA) $(noinst_DATA) $(pkgconfig_DATA) $(typelib_DATA)
-HEADERS = $(libmate_panel_appletinclude_HEADERS)
+HEADERS = $(libkiran_panel_appletinclude_HEADERS)
 am__tagged_files = $(HEADERS) $(SOURCES) $(TAGS_FILES) $(LISP)
 # Read a list of newline-separated strings from the standard input,
 # and print each of them once, without duplicates.  Input order is
@@ -246,8 +246,8 @@ am__define_uniq_tagged_files = \
 ETAGS = etags
 CTAGS = ctags
 am__DIST_COMMON = $(srcdir)/Makefile.in \
-	$(srcdir)/libmatepanelapplet-4.0-uninstalled.pc.in \
-	$(srcdir)/libmatepanelapplet-4.0.pc.in $(top_srcdir)/depcomp \
+	$(srcdir)/libkiranpanelapplet-4.0-uninstalled.pc.in \
+	$(srcdir)/libkiranpanelapplet-4.0.pc.in $(top_srcdir)/depcomp \
 	TODO
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 ACLOCAL = @ACLOCAL@
@@ -462,7 +462,7 @@ target_alias = @target_alias@
 top_build_prefix = @top_build_prefix@
 top_builddir = @top_builddir@
 top_srcdir = @top_srcdir@
-lib_LTLIBRARIES = libmate-panel-applet-4.la
+lib_LTLIBRARIES = libkiran-panel-applet-4.la
 AM_CPPFLAGS = \
 	$(LIBMATE_PANEL_APPLET_CFLAGS)				\
 	-I$(top_builddir)/libmate-panel-applet			\
@@ -470,28 +470,28 @@ AM_CPPFLAGS = \
 	$(DISABLE_DEPRECATED_CFLAGS)
 
 AM_CFLAGS = $(WARN_CFLAGS)
-libmate_panel_appletincludedir = $(includedir)/mate-panel-4.0/libmate-panel-applet
-libmate_panel_appletinclude_HEADERS = \
+libkiran_panel_appletincludedir = $(includedir)/kiran-panel-4.0/libkiran-panel-applet
+libkiran_panel_appletinclude_HEADERS = \
 	mate-panel-applet.h			\
 	mate-panel-applet-gsettings.h		\
 	mate-panel-applet-enums.h
 
-libmate_panel_applet_4_la_SOURCES = $(BUILT_SOURCES) \
+libkiran_panel_applet_4_la_SOURCES = $(BUILT_SOURCES) \
 	mate-panel-applet.h mate-panel-applet.c \
 	mate-panel-applet-factory.h mate-panel-applet-factory.c \
 	mate-panel-applet-gsettings.c mate-panel-applet-gsettings.h \
 	panel-applet-private.h $(am__append_1)
-libmate_panel_applet_4_la_LIBADD = \
+libkiran_panel_applet_4_la_LIBADD = \
 	$(LIBMATE_PANEL_APPLET_LIBS) \
 	$(X_LIBS)
 
-libmate_panel_applet_4_la_LDFLAGS = \
+libkiran_panel_applet_4_la_LDFLAGS = \
 	-version-info $(LIB_MATE_PANEL_APPLET_LT_VERSION)	\
 	-no-undefined
 
 test_dbus_applet_LDADD = \
 	$(LIBMATE_PANEL_APPLET_LIBS)	\
-	libmate-panel-applet-4.la
+	libkiran-panel-applet-4.la
 
 mate_panel_applet_enum_headers = $(top_srcdir)/libmate-panel-applet/mate-panel-applet.h
 BUILT_SOURCES = \
@@ -501,15 +501,15 @@ BUILT_SOURCES = \
 	mate-panel-applet-marshal.h
 
 pkgconfigdir = $(libdir)/pkgconfig
-pkgconfig_DATA = libmatepanelapplet-4.0.pc
-appletdir = $(datadir)/mate-panel/applets
+pkgconfig_DATA = libkiranpanelapplet-4.0.pc
+appletdir = $(datadir)/kiran-panel/applets
 applet_in_files = org.mate.panel.TestApplet.mate-panel-applet.in
 noinst_DATA = $(applet_in_files:.mate-panel-applet.in=.mate-panel-applet)
 EXTRA_DIST = \
 	org.mate.panel.TestApplet.mate-panel-applet.in	\
 	mate-panel-applet-marshal.list			\
-	libmatepanelapplet-4.0.pc.in			\
-	libmatepanelapplet-4.0-uninstalled.pc.in
+	libkiranpanelapplet-4.0.pc.in			\
+	libkiranpanelapplet-4.0-uninstalled.pc.in
 
 CLEANFILES = $(BUILT_SOURCES) $(noinst_DATA) $(am__append_3)
 INTROSPECTION_GIRS = $(am__append_2)
@@ -525,13 +525,13 @@ INTROSPECTION_COMPILER_ARGS = --includedir=$(srcdir)
 @HAVE_INTROSPECTION_TRUE@	mate-panel-applet-enums.c	\
 @HAVE_INTROSPECTION_TRUE@	mate-panel-applet-enums.h
 
-@HAVE_INTROSPECTION_TRUE@MatePanelApplet_4_0_gir_INCLUDES = GObject-2.0 Gtk-3.0 Gio-2.0
-@HAVE_INTROSPECTION_TRUE@MatePanelApplet_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -I$(srcdir)
-@HAVE_INTROSPECTION_TRUE@MatePanelApplet_4_0_gir_LIBS = libmate-panel-applet-4.la
-@HAVE_INTROSPECTION_TRUE@MatePanelApplet_4_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources)) $(addprefix $(builddir)/,$(built_introspection_sources))
+@HAVE_INTROSPECTION_TRUE@KiranPanelApplet_4_0_gir_INCLUDES = GObject-2.0 Gtk-3.0 Gio-2.0
+@HAVE_INTROSPECTION_TRUE@KiranPanelApplet_4_0_gir_CFLAGS = $(AM_CPPFLAGS) -I$(srcdir)
+@HAVE_INTROSPECTION_TRUE@KiranPanelApplet_4_0_gir_LIBS = libkiran-panel-applet-4.la
+@HAVE_INTROSPECTION_TRUE@KiranPanelApplet_4_0_gir_FILES = $(addprefix $(srcdir)/,$(introspection_sources)) $(addprefix $(builddir)/,$(built_introspection_sources))
 # When requiring gobject-introspection 0.9.5, use this:
-#MatePanelApplet_4_0_gir_SCANNERFLAGS = --identifier-prefix=Panel --symbol-prefix=panel --pkg-export=libmatepanelapplet-4.0
-@HAVE_INTROSPECTION_TRUE@MatePanelApplet_4_0_gir_SCANNERFLAGS = --strip-prefix=MatePanel --pkg-export=libmatepanelapplet-4.0
+#MatePanelApplet_4_0_gir_SCANNERFLAGS = --identifier-prefix=Panel --symbol-prefix=panel --pkg-export=libkiranpanelapplet-4.0
+@HAVE_INTROSPECTION_TRUE@KiranPanelApplet_4_0_gir_SCANNERFLAGS = --strip-prefix=MatePanel --pkg-export=libkiranpanelapplet-4.0
 @HAVE_INTROSPECTION_TRUE@girdir = $(INTROSPECTION_GIRDIR)
 @HAVE_INTROSPECTION_TRUE@gir_DATA = $(INTROSPECTION_GIRS)
 @HAVE_INTROSPECTION_TRUE@typelibdir = $(INTROSPECTION_TYPELIBDIR)
@@ -570,9 +570,9 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-libmatepanelapplet-4.0.pc: $(top_builddir)/config.status $(srcdir)/libmatepanelapplet-4.0.pc.in
+libkiranpanelapplet-4.0.pc: $(top_builddir)/config.status $(srcdir)/libkiranpanelapplet-4.0.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-libmatepanelapplet-4.0-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/libmatepanelapplet-4.0-uninstalled.pc.in
+libkiranpanelapplet-4.0-uninstalled.pc: $(top_builddir)/config.status $(srcdir)/libkiranpanelapplet-4.0-uninstalled.pc.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 clean-noinstPROGRAMS:
@@ -619,8 +619,8 @@ clean-libLTLIBRARIES:
 	  rm -f $${locs}; \
 	}
 
-libmate-panel-applet-4.la: $(libmate_panel_applet_4_la_OBJECTS) $(libmate_panel_applet_4_la_DEPENDENCIES) $(EXTRA_libmate_panel_applet_4_la_DEPENDENCIES) 
-	$(AM_V_CCLD)$(libmate_panel_applet_4_la_LINK) -rpath $(libdir) $(libmate_panel_applet_4_la_OBJECTS) $(libmate_panel_applet_4_la_LIBADD) $(LIBS)
+libkiran-panel-applet-4.la: $(libkiran_panel_applet_4_la_OBJECTS) $(libkiran_panel_applet_4_la_DEPENDENCIES) $(EXTRA_libkiran_panel_applet_4_la_DEPENDENCIES) 
+	$(AM_V_CCLD)$(libkiran_panel_applet_4_la_LINK) -rpath $(libdir) $(libkiran_panel_applet_4_la_OBJECTS) $(libkiran_panel_applet_4_la_LIBADD) $(LIBS)
 
 test-dbus-applet$(EXEEXT): $(test_dbus_applet_OBJECTS) $(test_dbus_applet_DEPENDENCIES) $(EXTRA_test_dbus_applet_DEPENDENCIES) 
 	@rm -f test-dbus-applet$(EXEEXT)
@@ -647,22 +647,25 @@ $(am__depfiles_remade):
 am--depfiles: $(am__depfiles_remade)
 
 .c.o:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.o$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ $<
 
 .c.obj:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(COMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ `$(CYGPATH_W) '$<'`
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Po
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.obj$$||'`;\
+@am__fastdepCC_TRUE@	$(COMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ `$(CYGPATH_W) '$<'` &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Po
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=no @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(COMPILE) -c -o $@ `$(CYGPATH_W) '$<'`
 
 .c.lo:
-@am__fastdepCC_TRUE@	$(AM_V_CC)$(LTCOMPILE) -MT $@ -MD -MP -MF $(DEPDIR)/$*.Tpo -c -o $@ $<
-@am__fastdepCC_TRUE@	$(AM_V_at)$(am__mv) $(DEPDIR)/$*.Tpo $(DEPDIR)/$*.Plo
+@am__fastdepCC_TRUE@	$(AM_V_CC)depbase=`echo $@ | sed 's|[^/]*$$|$(DEPDIR)/&|;s|\.lo$$||'`;\
+@am__fastdepCC_TRUE@	$(LTCOMPILE) -MT $@ -MD -MP -MF $$depbase.Tpo -c -o $@ $< &&\
+@am__fastdepCC_TRUE@	$(am__mv) $$depbase.Tpo $$depbase.Plo
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	$(AM_V_CC)source='$<' object='$@' libtool=yes @AMDEPBACKSLASH@
 @AMDEP_TRUE@@am__fastdepCC_FALSE@	DEPDIR=$(DEPDIR) $(CCDEPMODE) $(depcomp) @AMDEPBACKSLASH@
 @am__fastdepCC_FALSE@	$(AM_V_CC@am__nodep@)$(LTCOMPILE) -c -o $@ $<
@@ -735,27 +738,27 @@ uninstall-typelibDATA:
 	@list='$(typelib_DATA)'; test -n "$(typelibdir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
 	dir='$(DESTDIR)$(typelibdir)'; $(am__uninstall_files_from_dir)
-install-libmate_panel_appletincludeHEADERS: $(libmate_panel_appletinclude_HEADERS)
+install-libkiran_panel_appletincludeHEADERS: $(libkiran_panel_appletinclude_HEADERS)
 	@$(NORMAL_INSTALL)
-	@list='$(libmate_panel_appletinclude_HEADERS)'; test -n "$(libmate_panel_appletincludedir)" || list=; \
+	@list='$(libkiran_panel_appletinclude_HEADERS)'; test -n "$(libkiran_panel_appletincludedir)" || list=; \
 	if test -n "$$list"; then \
-	  echo " $(MKDIR_P) '$(DESTDIR)$(libmate_panel_appletincludedir)'"; \
-	  $(MKDIR_P) "$(DESTDIR)$(libmate_panel_appletincludedir)" || exit 1; \
+	  echo " $(MKDIR_P) '$(DESTDIR)$(libkiran_panel_appletincludedir)'"; \
+	  $(MKDIR_P) "$(DESTDIR)$(libkiran_panel_appletincludedir)" || exit 1; \
 	fi; \
 	for p in $$list; do \
 	  if test -f "$$p"; then d=; else d="$(srcdir)/"; fi; \
 	  echo "$$d$$p"; \
 	done | $(am__base_list) | \
 	while read files; do \
-	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(libmate_panel_appletincludedir)'"; \
-	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(libmate_panel_appletincludedir)" || exit $$?; \
+	  echo " $(INSTALL_HEADER) $$files '$(DESTDIR)$(libkiran_panel_appletincludedir)'"; \
+	  $(INSTALL_HEADER) $$files "$(DESTDIR)$(libkiran_panel_appletincludedir)" || exit $$?; \
 	done
 
-uninstall-libmate_panel_appletincludeHEADERS:
+uninstall-libkiran_panel_appletincludeHEADERS:
 	@$(NORMAL_UNINSTALL)
-	@list='$(libmate_panel_appletinclude_HEADERS)'; test -n "$(libmate_panel_appletincludedir)" || list=; \
+	@list='$(libkiran_panel_appletinclude_HEADERS)'; test -n "$(libkiran_panel_appletincludedir)" || list=; \
 	files=`for p in $$list; do echo $$p; done | sed -e 's|^.*/||'`; \
-	dir='$(DESTDIR)$(libmate_panel_appletincludedir)'; $(am__uninstall_files_from_dir)
+	dir='$(DESTDIR)$(libkiran_panel_appletincludedir)'; $(am__uninstall_files_from_dir)
 
 ID: $(am__tagged_files)
 	$(am__define_uniq_tagged_files); mkid -fID $$unique
@@ -850,7 +853,7 @@ check: $(BUILT_SOURCES)
 	$(MAKE) $(AM_MAKEFLAGS) check-am
 all-am: Makefile $(PROGRAMS) $(LTLIBRARIES) $(DATA) $(HEADERS)
 installdirs:
-	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(girdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(typelibdir)" "$(DESTDIR)$(libmate_panel_appletincludedir)"; do \
+	for dir in "$(DESTDIR)$(libdir)" "$(DESTDIR)$(girdir)" "$(DESTDIR)$(pkgconfigdir)" "$(DESTDIR)$(typelibdir)" "$(DESTDIR)$(libkiran_panel_appletincludedir)"; do \
 	  test -z "$$dir" || $(MKDIR_P) "$$dir"; \
 	done
 install: $(BUILT_SOURCES)
@@ -916,7 +919,7 @@ info: info-am
 info-am:
 
 install-data-am: install-girDATA \
-	install-libmate_panel_appletincludeHEADERS \
+	install-libkiran_panel_appletincludeHEADERS \
 	install-pkgconfigDATA install-typelibDATA
 
 install-dvi: install-dvi-am
@@ -970,7 +973,7 @@ ps: ps-am
 ps-am:
 
 uninstall-am: uninstall-girDATA uninstall-libLTLIBRARIES \
-	uninstall-libmate_panel_appletincludeHEADERS \
+	uninstall-libkiran_panel_appletincludeHEADERS \
 	uninstall-pkgconfigDATA uninstall-typelibDATA
 
 .MAKE: all check install install-am install-strip
@@ -984,7 +987,7 @@ uninstall-am: uninstall-girDATA uninstall-libLTLIBRARIES \
 	install-data-am install-dvi install-dvi-am install-exec \
 	install-exec-am install-girDATA install-html install-html-am \
 	install-info install-info-am install-libLTLIBRARIES \
-	install-libmate_panel_appletincludeHEADERS install-man \
+	install-libkiran_panel_appletincludeHEADERS install-man \
 	install-pdf install-pdf-am install-pkgconfigDATA install-ps \
 	install-ps-am install-strip install-typelibDATA installcheck \
 	installcheck-am installdirs maintainer-clean \
@@ -992,13 +995,13 @@ uninstall-am: uninstall-girDATA uninstall-libLTLIBRARIES \
 	mostlyclean-generic mostlyclean-libtool pdf pdf-am ps ps-am \
 	tags tags-am uninstall uninstall-am uninstall-girDATA \
 	uninstall-libLTLIBRARIES \
-	uninstall-libmate_panel_appletincludeHEADERS \
+	uninstall-libkiran_panel_appletincludeHEADERS \
 	uninstall-pkgconfigDATA uninstall-typelibDATA
 
 .PRECIOUS: Makefile
 
 
-$(libmate_panel_applet_4_la_OBJECTS) $(test_dbus_applet_OBJECTS): $(BUILT_SOURCES)
+$(libkiran_panel_applet_4_la_OBJECTS) $(test_dbus_applet_OBJECTS): $(BUILT_SOURCES)
 
 mate-panel-applet-marshal.h: mate-panel-applet-marshal.list $(GLIB_GENMARSHAL)
 	$(AM_V_GEN)$(GLIB_GENMARSHAL) $< --header --prefix=mate_panel_applet_marshal > $@
@@ -1042,7 +1045,7 @@ mate-panel-applet-enums.h: @REBUILD@ $(mate_panel_applet_enum_headers)
 
 -include $(INTROSPECTION_MAKEFILE)
 
-@HAVE_INTROSPECTION_TRUE@MatePanelApplet-4.0.gir: libmate-panel-applet-4.la
+@HAVE_INTROSPECTION_TRUE@KiranPanelApplet-4.0.gir: libkiran-panel-applet-4.la
 
 ################################
 

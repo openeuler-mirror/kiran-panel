@@ -1,6 +1,6 @@
 <schemalist gettext-domain="@GETTEXT_PACKAGE@">
-  <schema id="org.mate.panel.object">
-    <key name="object-type" enum="org.mate.panel.PanelObjectType">
+  <schema id="org.kiran.panel.object">
+    <key name="object-type" enum="org.kiran.panel.PanelObjectType">
       <default>'launcher'</default>
       <summary>Panel object type</summary>
       <description>The type of this panel object.</description>
@@ -12,7 +12,7 @@
     </key>
     <key name="position" type="i">
       <default>0</default>
-      <summary>Object's position on the panel</summary>
+      <summary>Object position on the panel</summary>
       <description>The position of this panel object. The position is specified by the number of pixels from the left (or top if vertical) panel edge.</description>
     </key>
     <key name="panel-right-stick" type="b">
@@ -42,7 +42,7 @@
     </key>
     <key name="use-custom-icon" type="b">
       <default>false</default>
-      <summary>Use custom icon for object's button</summary>
+      <summary>Use custom icon for object button</summary>
       <description>If true, the custom_icon key is used as a custom icon for the button. If false, the custom_icon key is ignored. This key is only relevant if the object_type key is "menu-object" or "drawer-object".</description>
     </key>
     <key name="custom-icon" type="s">
@@ -70,7 +70,7 @@
       <summary>Launcher location</summary>
       <description>The location of the .desktop file describing the launcher. This key is only relevant if the object_type key is "launcher-object".</description>
     </key>
-    <key name="action-type" enum="org.mate.panel.PanelActionButtonType">
+    <key name="action-type" enum="org.kiran.panel.PanelActionButtonType">
       <default>'none'</default>
       <summary>Action button type</summary>
       <description>The action type this button represents. Possible values are "lock", "logout", "run", "search" and "screenshot". This key is only relevant if the object_type key is "action-applet".</description>

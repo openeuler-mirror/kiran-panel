@@ -1,9 +1,9 @@
 SUBDIRS = wayland-protocols libegg libmate-panel-applet-private libpanel-util
 
 bin_PROGRAMS = \
-	mate-panel \
-	mate-desktop-item-edit \
-	mate-panel-test-applets
+	kiran-panel \
+	kiran-desktop-item-edit \
+	kiran-panel-test-applets
 
 AM_CPPFLAGS = \
 	$(PANEL_CFLAGS) \
@@ -13,13 +13,13 @@ AM_CPPFLAGS = \
 	-I$(top_builddir)/mate-panel \
 	-I$(top_builddir)/mate-panel/libpanel-util \
 	-DMATELOCALEDIR=\""$(prefix)/$(DATADIRNAME)/locale"\" \
-	-DPANELDATADIR=\""$(datadir)/mate-panel"\" \
+	-DPANELDATADIR=\""$(datadir)/kiran-panel"\" \
 	$(DISABLE_DEPRECATED_CFLAGS)
 
 AM_CFLAGS = $(WARN_CFLAGS)
 
 panel_sources = \
-	$(mate_panel_BUILT_SOURCES) \
+	$(kiran_panel_BUILT_SOURCES) \
 	main.c \
 	panel-widget.c \
 	button-widget.c \
@@ -129,23 +129,23 @@ panel_headers += \
 	wayland-protocols/xdg-shell-client-protocol.h
 endif
 
-mate_panel_SOURCES = \
+kiran_panel_SOURCES = \
 	$(panel_sources) \
 	$(panel_headers)
 
-mate_panel_CPPFLAGS = \
+kiran_panel_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	$(XRANDR_CFLAGS) \
 	-DPANEL_MODULES_DIR=\"$(modulesdir)\" \
 	-DMATEMENU_I_KNOW_THIS_IS_UNSTABLE
 
 if ENABLE_WAYLAND
-mate_panel_CPPFLAGS += \
+kiran_panel_CPPFLAGS += \
 	$(WAYLAND_CFLAGS)
 endif
 
 
-mate_panel_LDADD = \
+kiran_panel_LDADD = \
 	$(top_builddir)/mate-panel/libegg/libegg.la \
 	$(top_builddir)/mate-panel/libmate-panel-applet-private/libmate-panel-applet-private.la \
 	$(top_builddir)/mate-panel/libpanel-util/libpanel-util.la \
@@ -156,44 +156,44 @@ mate_panel_LDADD = \
 	-lm
 
 if ENABLE_WAYLAND
-mate_panel_LDADD += \
+kiran_panel_LDADD += \
 	$(WAYLAND_LIBS)
 endif
 
-mate_panel_LDFLAGS = -export-dynamic
+kiran_panel_LDFLAGS = -export-dynamic
 
-mate_desktop_item_edit_SOURCES = \
+kiran_desktop_item_edit_SOURCES = \
 	mate-desktop-item-edit.c \
 	panel-ditem-editor.c \
 	panel-marshal.c \
 	panel-util.c \
 	xstuff.c
 
-mate_desktop_item_edit_LDADD = \
+kiran_desktop_item_edit_LDADD = \
 	$(top_builddir)/mate-panel/libpanel-util/libpanel-util.la \
 	$(PANEL_LIBS) \
 	$(DCONF_LIBS) \
 	-lX11
 
-mate_panel_test_applets_SOURCES = \
+kiran_panel_test_applets_SOURCES = \
 	$(panel_test_applets_BUILT_SOURCES)	\
 	panel-modules.c \
 	panel-applet-info.c \
 	panel-applets-manager.c \
 	panel-test-applets.c
 
-mate_panel_test_applets_CPPFLAGS = \
+kiran_panel_test_applets_CPPFLAGS = \
 	$(AM_CPPFLAGS) \
 	-DPANEL_MODULES_DIR=\"$(modulesdir)\" \
 	-DMATE_PANEL_APPLETS_DIR=\"$(appletsdir)\"
 
-mate_panel_test_applets_LDADD = \
+kiran_panel_test_applets_LDADD = \
 	$(top_builddir)/mate-panel/libmate-panel-applet-private/libmate-panel-applet-private-mini.la \
 	$(top_builddir)/mate-panel/libpanel-util/libpanel-util.la \
 	$(PANEL_LIBS) \
 	$(DCONF_LIBS)
 
-mate_panel_test_applets_LDFLAGS = -export-dynamic
+kiran_panel_test_applets_LDFLAGS = -export-dynamic
 
 panel_enum_headers = \
 	$(top_srcdir)/mate-panel/panel-enums.h \
@@ -235,7 +235,7 @@ panel-typebuiltins.h: @REBUILD@ $(panel_enum_headers)
 			--eprod "GType @enum_name@_get_type (void);\n" \
 		$(panel_enum_headers) > $@
 
-mate_panel_BUILT_SOURCES = \
+kiran_panel_BUILT_SOURCES = \
 	panel-typebuiltins.c \
 	panel-typebuiltins.h \
 	panel-resources.c		\
@@ -250,7 +250,7 @@ panel_test_applets_BUILT_SOURCES = 	\
 	panel-marshal.h
 
 BUILT_SOURCES = 				\
-	$(mate_panel_BUILT_SOURCES)		\
+	$(kiran_panel_BUILT_SOURCES)		\
 	$(panel_test_applets_BUILT_SOURCES)
 
 ui_FILES =					\
@@ -272,7 +272,7 @@ panel-test-applets-resources.h: panel-test-applets.gresource.xml $(shell $(GLIB_
 	$(AM_V_GEN)$(GLIB_COMPILE_RESOURCES) --target=$@ --sourcedir=$(srcdir) --generate --c-name panel $<
 
 desktopdir = $(datadir)/applications
-desktop_in_files = mate-panel.desktop.in
+desktop_in_files = kiran-panel.desktop.in
 desktop_DATA = $(desktop_in_files:.desktop.in=.desktop)
 
 @INTLTOOL_DESKTOP_RULE@

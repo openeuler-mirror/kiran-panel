@@ -30,7 +30,7 @@
 
 #include <mate-panel-applet.h>
 
-#define PANEL_OBJECT_PREFS_PATH "/org/mate/panel/objects/%s/prefs"
+#define PANEL_OBJECT_PREFS_PATH "/org/kiran/panel/objects/%s/prefs"
 
 G_BEGIN_DECLS
 

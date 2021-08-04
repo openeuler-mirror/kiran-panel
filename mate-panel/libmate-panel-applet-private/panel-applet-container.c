@@ -72,7 +72,7 @@ static const AppletPropertyInfo applet_properties [] = {
 #define MATE_PANEL_APPLET_CONTAINER_GET_PRIVATE(o) \
 	(G_TYPE_INSTANCE_GET_PRIVATE ((o), PANEL_TYPE_APPLET_CONTAINER, MatePanelAppletContainerPrivate))
 
-#define MATE_PANEL_APPLET_BUS_NAME            "org.mate.panel.applet.%s"
+#define MATE_PANEL_APPLET_BUS_NAME            "org.kiran.panel.applet.%s"
 #define MATE_PANEL_APPLET_FACTORY_INTERFACE   "org.mate.panel.applet.AppletFactory"
 #define MATE_PANEL_APPLET_FACTORY_OBJECT_PATH "/org/mate/panel/applet/%s"
 #define MATE_PANEL_APPLET_INTERFACE           "org.mate.panel.applet.Applet"

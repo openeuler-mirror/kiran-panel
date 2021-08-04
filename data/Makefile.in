@@ -100,10 +100,10 @@ am__configure_deps = $(am__aclocal_m4_deps) $(CONFIGURE_DEPENDENCIES) \
 DIST_COMMON = $(srcdir)/Makefile.am $(am__DIST_COMMON)
 mkinstalldirs = $(install_sh) -d
 CONFIG_HEADER = $(top_builddir)/config.h
-CONFIG_CLEAN_FILES = org.mate.panel.gschema.xml \
-	org.mate.panel.menubar.gschema.xml \
-	org.mate.panel.object.gschema.xml \
-	org.mate.panel.toplevel.gschema.xml
+CONFIG_CLEAN_FILES = org.kiran.panel.gschema.xml \
+	org.kiran.panel.menubar.gschema.xml \
+	org.kiran.panel.object.gschema.xml \
+	org.kiran.panel.toplevel.gschema.xml
 CONFIG_CLEAN_VPATH_FILES =
 AM_V_P = $(am__v_P_@AM_V@)
 am__v_P_ = $(am__v_P_@AM_DEFAULT_V@)
@@ -190,10 +190,10 @@ ETAGS = etags
 CTAGS = ctags
 DIST_SUBDIRS = $(SUBDIRS)
 am__DIST_COMMON = $(srcdir)/Makefile.in \
-	$(srcdir)/org.mate.panel.gschema.xml.in \
-	$(srcdir)/org.mate.panel.menubar.gschema.xml.in \
-	$(srcdir)/org.mate.panel.object.gschema.xml.in \
-	$(srcdir)/org.mate.panel.toplevel.gschema.xml.in
+	$(srcdir)/org.kiran.panel.gschema.xml.in \
+	$(srcdir)/org.kiran.panel.menubar.gschema.xml.in \
+	$(srcdir)/org.kiran.panel.object.gschema.xml.in \
+	$(srcdir)/org.kiran.panel.toplevel.gschema.xml.in
 DISTFILES = $(DIST_COMMON) $(DIST_SOURCES) $(TEXINFOS) $(EXTRA_DIST)
 am__relativize = \
   dir0=`pwd`; \
@@ -435,22 +435,23 @@ top_srcdir = @top_srcdir@
 SUBDIRS = \
 	theme
 
-layoutdir = $(datadir)/mate-panel/layouts
+layoutdir = $(datadir)/kiran-panel/layouts
 layout_DATA = \
 	default.layout \
 	fedora.layout \
 	linuxmint.layout \
 	mageia.layout \
 	opensuse.layout \
-	ubuntu.layout
+	ubuntu.layout \
+	unikylin.layout
 
-gsettings_ENUM_NAMESPACE = org.mate.panel
+gsettings_ENUM_NAMESPACE = org.kiran.panel
 gsettings_ENUM_FILES = $(top_srcdir)/mate-panel/panel-enums-gsettings.h
 panel_gschemas_in = \
-	org.mate.panel.gschema.xml.in \
-	org.mate.panel.object.gschema.xml.in \
-	org.mate.panel.toplevel.gschema.xml.in \
-	org.mate.panel.menubar.gschema.xml.in
+	org.kiran.panel.gschema.xml.in \
+	org.kiran.panel.object.gschema.xml.in \
+	org.kiran.panel.toplevel.gschema.xml.in \
+	org.kiran.panel.menubar.gschema.xml.in
 
 gsettings_SCHEMAS = $(panel_gschemas_in:.xml.in=.xml)
 EXTRA_DIST = \
@@ -490,13 +491,13 @@ $(top_srcdir)/configure: @MAINTAINER_MODE_TRUE@ $(am__configure_deps)
 $(ACLOCAL_M4): @MAINTAINER_MODE_TRUE@ $(am__aclocal_m4_deps)
 	cd $(top_builddir) && $(MAKE) $(AM_MAKEFLAGS) am--refresh
 $(am__aclocal_m4_deps):
-org.mate.panel.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.mate.panel.gschema.xml.in
+org.kiran.panel.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.kiran.panel.gschema.xml.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-org.mate.panel.menubar.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.mate.panel.menubar.gschema.xml.in
+org.kiran.panel.menubar.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.kiran.panel.menubar.gschema.xml.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-org.mate.panel.object.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.mate.panel.object.gschema.xml.in
+org.kiran.panel.object.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.kiran.panel.object.gschema.xml.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
-org.mate.panel.toplevel.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.mate.panel.toplevel.gschema.xml.in
+org.kiran.panel.toplevel.gschema.xml: $(top_builddir)/config.status $(srcdir)/org.kiran.panel.toplevel.gschema.xml.in
 	cd $(top_builddir) && $(SHELL) ./config.status $(subdir)/$@
 
 mostlyclean-libtool:

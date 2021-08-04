@@ -1,25 +1,26 @@
 SUBDIRS = \
 	theme
 
-layoutdir   = $(datadir)/mate-panel/layouts
+layoutdir   = $(datadir)/kiran-panel/layouts
 layout_DATA = \
 	default.layout \
 	fedora.layout \
 	linuxmint.layout \
 	mageia.layout \
 	opensuse.layout \
-	ubuntu.layout
+	ubuntu.layout \
+	unikylin.layout
 
 @INTLTOOL_XML_NOMERGE_RULE@
 
-gsettings_ENUM_NAMESPACE = org.mate.panel
+gsettings_ENUM_NAMESPACE = org.kiran.panel
 gsettings_ENUM_FILES = $(top_srcdir)/mate-panel/panel-enums-gsettings.h
 
 panel_gschemas_in = \
-	org.mate.panel.gschema.xml.in \
-	org.mate.panel.object.gschema.xml.in \
-	org.mate.panel.toplevel.gschema.xml.in \
-	org.mate.panel.menubar.gschema.xml.in
+	org.kiran.panel.gschema.xml.in \
+	org.kiran.panel.object.gschema.xml.in \
+	org.kiran.panel.toplevel.gschema.xml.in \
+	org.kiran.panel.menubar.gschema.xml.in
 
 gsettings_SCHEMAS = $(panel_gschemas_in:.xml.in=.xml)
 

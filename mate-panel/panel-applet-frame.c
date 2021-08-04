@@ -81,7 +81,7 @@ G_DEFINE_TYPE (MatePanelAppletFrame, mate_panel_applet_frame, GTK_TYPE_EVENT_BOX
 #define MATE_PANEL_APPLET_FRAME_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PANEL_TYPE_APPLET_FRAME, MatePanelAppletFramePrivate))
 
 #define HANDLE_SIZE 10
-#define MATE_PANEL_APPLET_PREFS_PATH "/org/mate/panel/objects/%s/prefs/"
+#define MATE_PANEL_APPLET_PREFS_PATH "/org/kiran/panel/objects/%s/prefs/"
 
 struct _MatePanelAppletFramePrivate {
 	PanelWidget     *panel;

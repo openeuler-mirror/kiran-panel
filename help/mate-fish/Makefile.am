@@ -1,6 +1,6 @@
 @YELP_HELP_RULES@
 
-HELP_ID = mate-fish
+HELP_ID = kiran-fish
 
 HELP_FILES = \
 	index.docbook \

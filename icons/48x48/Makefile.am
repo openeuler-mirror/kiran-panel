@@ -3,10 +3,10 @@ size = 48x48
 iconsdir = $(datadir)/icons/hicolor/$(size)/apps
 
 icons_DATA =					\
-	mate-panel.png
+	kiran-panel.png
 
 icons_SOURCE =					\
-	mate-panel.svg
+	kiran-panel.svg
 
 gtk_update_icon_cache = gtk-update-icon-cache -f -t $(datadir)/icons/hicolor
 

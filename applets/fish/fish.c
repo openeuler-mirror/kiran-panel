@@ -47,10 +47,10 @@
 #define FISH_IS_APPLET(o) \
 	(G_TYPE_CHECK_INSTANCE_TYPE((o), FISH_TYPE_APPLET))
 
-#define FISH_ICON "mate-panel-fish"
+#define FISH_ICON "kiran-panel-fish"
 #define FISH_RESOURCE_PATH "/org/mate/panel/applet/fish/"
 
-#define FISH_SCHEMA      "org.mate.panel.applet.fish"
+#define FISH_SCHEMA      "org.kiran.panel.applet.fish"
 #define FISH_NAME_KEY    "name"
 #define FISH_IMAGE_KEY   "image"
 #define FISH_COMMAND_KEY "command"

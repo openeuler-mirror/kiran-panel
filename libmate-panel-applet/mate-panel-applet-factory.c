@@ -52,7 +52,7 @@ struct _MatePanelAppletFactoryClass {
 };
 
 #define MATE_PANEL_APPLET_FACTORY_OBJECT_PATH  "/org/mate/panel/applet/%s"
-#define MATE_PANEL_APPLET_FACTORY_SERVICE_NAME "org.mate.panel.applet.%s"
+#define MATE_PANEL_APPLET_FACTORY_SERVICE_NAME "org.kiran.panel.applet.%s"
 
 G_DEFINE_TYPE (MatePanelAppletFactory, mate_panel_applet_factory, G_TYPE_OBJECT)
 

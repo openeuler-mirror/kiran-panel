@@ -31,9 +31,9 @@
 extern "C" {
 #endif
 
-#define CLOCK_ICON "mate-panel-clock"
+#define CLOCK_ICON "kiran-panel-clock"
 #define CLOCK_RESOURCE_PATH "/org/mate/panel/applet/clock/"
-#define CLOCK_SCHEMA "org.mate.panel.applet.clock"
+#define CLOCK_SCHEMA "org.kiran.panel.applet.clock"
 
 #ifdef __cplusplus
 }

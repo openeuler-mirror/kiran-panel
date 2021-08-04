@@ -29,8 +29,8 @@
 #include "wncklet.h"
 #include "window-list.h"
 
-#define WINDOW_LIST_ICON "mate-panel-window-list"
-#define WINDOW_LIST_SCHEMA "org.mate.panel.applet.window-list"
+#define WINDOW_LIST_ICON "kiran-panel-window-list"
+#define WINDOW_LIST_SCHEMA "org.kiran.panel.applet.window-list"
 
 typedef struct {
 	GtkWidget* applet;

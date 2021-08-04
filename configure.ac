@@ -1,7 +1,7 @@
-AC_INIT([mate-panel], [1.22.1], [https://github.com/mate-desktop/mate-panel/issues],
-    [mate-panel], [http://www.mate-desktop.org])
+AC_INIT([kiran-panel], [1.22.1], [https://github.com/mate-desktop/mate-panel/issues],
+    [kiran-panel], [http://www.mate-desktop.org])
 AC_CONFIG_HEADERS(config.h)
-AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar -Wno-portability check-news])
+AM_INIT_AUTOMAKE([1.9 no-dist-gzip dist-xz tar-ustar -Wno-portability check-news subdir-objects])
 m4_ifdef([AM_SILENT_RULES], [AM_SILENT_RULES([yes])])
 
 AC_CONFIG_MACRO_DIR([m4])
@@ -234,15 +234,15 @@ if test "x$have_randr" = "xyes"; then
 fi
 
 dnl Modules dir
-AC_SUBST([modulesdir],"\$(libdir)/mate-panel/modules")
+AC_SUBST([modulesdir],"\$(libdir)/kiran-panel/modules")
 
 dnl Applets dir
-AC_SUBST([appletsdir],"\$(datadir)/mate-panel/applets")
+AC_SUBST([appletsdir],"\$(datadir)/kiran-panel/applets")
 
 
 dnl  Language Support
 
-GETTEXT_PACKAGE=mate-panel
+GETTEXT_PACKAGE=kiran-panel
 AC_DEFINE_UNQUOTED(GETTEXT_PACKAGE, "$GETTEXT_PACKAGE", [Define the gettext package to be used])
 AC_SUBST(GETTEXT_PACKAGE)
 
@@ -286,10 +286,10 @@ AC_OUTPUT([
 Makefile
 data/Makefile
 data/theme/Makefile
-data/org.mate.panel.gschema.xml
-data/org.mate.panel.menubar.gschema.xml
-data/org.mate.panel.object.gschema.xml
-data/org.mate.panel.toplevel.gschema.xml
+data/org.kiran.panel.gschema.xml
+data/org.kiran.panel.menubar.gschema.xml
+data/org.kiran.panel.object.gschema.xml
+data/org.kiran.panel.toplevel.gschema.xml
 icons/Makefile
 icons/16x16/Makefile
 icons/22x22/Makefile
@@ -302,24 +302,24 @@ mate-panel/libegg/Makefile
 mate-panel/libmate-panel-applet-private/Makefile
 mate-panel/libpanel-util/Makefile
 mate-panel/wayland-protocols/Makefile
-libmate-panel-applet/libmatepanelapplet-4.0.pc
-libmate-panel-applet/libmatepanelapplet-4.0-uninstalled.pc
+libmate-panel-applet/libkiranpanelapplet-4.0.pc
+libmate-panel-applet/libkiranpanelapplet-4.0-uninstalled.pc
 libmate-panel-applet/Makefile
 po/Makefile.in
 applets/Makefile
 applets/clock/Makefile
-applets/clock/org.mate.panel.applet.clock.gschema.xml
+applets/clock/org.kiran.panel.applet.clock.gschema.xml
 applets/clock/pixmaps/Makefile
 applets/fish/Makefile
-applets/fish/org.mate.panel.applet.fish.gschema.xml
+applets/fish/org.kiran.panel.applet.fish.gschema.xml
 applets/notification_area/Makefile
-applets/notification_area/org.mate.panel.applet.notification-area.gschema.xml
+applets/notification_area/org.kiran.panel.applet.notification-area.gschema.xml
 applets/notification_area/libstatus-notifier-watcher/Makefile
 applets/notification_area/status-notifier/Makefile
 applets/notification_area/system-tray/Makefile
 applets/wncklet/Makefile
-applets/wncklet/org.mate.panel.applet.window-list.gschema.xml
-applets/wncklet/org.mate.panel.applet.workspace-switcher.gschema.xml
+applets/wncklet/org.kiran.panel.applet.window-list.gschema.xml
+applets/wncklet/org.kiran.panel.applet.workspace-switcher.gschema.xml
 doc/Makefile
 doc/reference/Makefile
 doc/reference/mate-panel-applet/Makefile
@@ -344,8 +344,8 @@ dnl - Show summary
 dnl ---------------------------------------------------------------------------
 
 echo "
-              mate-panel $VERSION
-              `echo mate-panel $VERSION | sed "s/./=/g"`
+              kiran-panel $VERSION
+              `echo kiran-panel $VERSION | sed "s/./=/g"`
 
         prefix:                        ${prefix}
         exec_prefix:                   ${exec_prefix}

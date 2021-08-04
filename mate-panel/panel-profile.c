@@ -1614,7 +1614,7 @@ panel_profile_ensure_toplevel_per_screen ()
 void
 panel_profile_settings_load (void)
 {
-	profile_settings = g_settings_new ("org.mate.panel");
+	profile_settings = g_settings_new ("org.kiran.panel");
 }
 
 void

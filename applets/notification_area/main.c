@@ -43,7 +43,7 @@
 # include "libstatus-notifier-watcher/gf-status-notifier-watcher.h"
 #endif
 
-#define NOTIFICATION_AREA_ICON "mate-panel-notification-area"
+#define NOTIFICATION_AREA_ICON "kiran-panel-notification-area"
 
 typedef struct
 {
@@ -84,7 +84,7 @@ static GfStatusNotifierWatcher *
 sn_watcher_service_ref (void)
 {
   GSettings *settings;
-  settings = g_settings_new ("org.mate.panel");
+  settings = g_settings_new ("org.kiran.panel");
 
   if (g_settings_get_boolean (settings, "enable-sni-support") == TRUE)
     {

@@ -38,7 +38,7 @@ NOTIFICATION_AREA_SOURCES = \
 	$(BUILT_SOURCES)
 
 NOTIFICATION_AREA_LDADD =				\
-	../../libmate-panel-applet/libmate-panel-applet-4.la	\
+	../../libmate-panel-applet/libkiran-panel-applet-4.la	\
 	libtray.la \
 	$(NOTIFICATION_AREA_LIBS)			\
 	$(LIBMATE_PANEL_APPLET_LIBS)
@@ -69,7 +69,7 @@ notification_area_applet_LDADD = $(NOTIFICATION_AREA_LDADD)
 notification_area_applet_CFLAGS = $(AM_CFLAGS)
 endif
 
-appletdir       = $(datadir)/mate-panel/applets
+appletdir       = $(datadir)/kiran-panel/applets
 applet_in_files = org.mate.panel.NotificationAreaApplet.mate-panel-applet.in
 applet_DATA     = $(applet_in_files:.mate-panel-applet.in=.mate-panel-applet)
 
@@ -84,16 +84,16 @@ $(applet_in_files): $(applet_in_files).in Makefile
 
 if !NOTIFICATION_AREA_INPROCESS
 servicedir       = $(datadir)/dbus-1/services
-service_in_files = org.mate.panel.applet.NotificationAreaAppletFactory.service.in
+service_in_files = org.kiran.panel.applet.NotificationAreaAppletFactory.service.in
 service_DATA     = $(service_in_files:.service.in=.service)
 
-org.mate.panel.applet.NotificationAreaAppletFactory.service: $(service_in_files)
+org.kiran.panel.applet.NotificationAreaAppletFactory.service: $(service_in_files)
 	$(AM_V_GEN)sed \
 		-e "s|\@LOCATION\@|$(APPLET_LOCATION)|" \
 		$< > $@
 endif
 
-notification_area_gschemas_in = org.mate.panel.applet.notification-area.gschema.xml.in
+notification_area_gschemas_in = org.kiran.panel.applet.notification-area.gschema.xml.in
 gsettings_SCHEMAS = $(notification_area_gschemas_in:.xml.in=.xml)
 
 ui_FILES = \
