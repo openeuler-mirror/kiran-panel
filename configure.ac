@@ -307,25 +307,12 @@ libmate-panel-applet/libkiranpanelapplet-4.0-uninstalled.pc
 libmate-panel-applet/Makefile
 po/Makefile.in
 applets/Makefile
-applets/clock/Makefile
-applets/clock/org.kiran.panel.applet.clock.gschema.xml
-applets/clock/pixmaps/Makefile
-applets/fish/Makefile
-applets/fish/org.kiran.panel.applet.fish.gschema.xml
-applets/notification_area/Makefile
-applets/notification_area/org.kiran.panel.applet.notification-area.gschema.xml
-applets/notification_area/libstatus-notifier-watcher/Makefile
-applets/notification_area/status-notifier/Makefile
-applets/notification_area/system-tray/Makefile
 applets/wncklet/Makefile
 applets/wncklet/org.kiran.panel.applet.window-list.gschema.xml
 applets/wncklet/org.kiran.panel.applet.workspace-switcher.gschema.xml
 doc/Makefile
 doc/reference/Makefile
 doc/reference/mate-panel-applet/Makefile
-help/Makefile
-help/mate-clock/Makefile
-help/mate-fish/Makefile
 man/Makefile
 ])
 

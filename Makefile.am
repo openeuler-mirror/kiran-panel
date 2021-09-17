@@ -3,7 +3,6 @@ SUBDIRS =			\
 	libmate-panel-applet		\
 	applets			\
 	doc			\
-	help			\
 	icons			\
 	data			\
 	man			\

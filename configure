@@ -16933,7 +16933,7 @@ if test "x$enable_rebuilds" = "xyes" && \
 fi
 
 
-ac_config_files="$ac_config_files Makefile data/Makefile data/theme/Makefile data/org.kiran.panel.gschema.xml data/org.kiran.panel.menubar.gschema.xml data/org.kiran.panel.object.gschema.xml data/org.kiran.panel.toplevel.gschema.xml icons/Makefile icons/16x16/Makefile icons/22x22/Makefile icons/24x24/Makefile icons/32x32/Makefile icons/48x48/Makefile icons/scalable/Makefile mate-panel/Makefile mate-panel/libegg/Makefile mate-panel/libmate-panel-applet-private/Makefile mate-panel/libpanel-util/Makefile mate-panel/wayland-protocols/Makefile libmate-panel-applet/libkiranpanelapplet-4.0.pc libmate-panel-applet/libkiranpanelapplet-4.0-uninstalled.pc libmate-panel-applet/Makefile po/Makefile.in applets/Makefile applets/clock/Makefile applets/clock/org.kiran.panel.applet.clock.gschema.xml applets/clock/pixmaps/Makefile applets/fish/Makefile applets/fish/org.kiran.panel.applet.fish.gschema.xml applets/notification_area/Makefile applets/notification_area/org.kiran.panel.applet.notification-area.gschema.xml applets/notification_area/libstatus-notifier-watcher/Makefile applets/notification_area/status-notifier/Makefile applets/notification_area/system-tray/Makefile applets/wncklet/Makefile applets/wncklet/org.kiran.panel.applet.window-list.gschema.xml applets/wncklet/org.kiran.panel.applet.workspace-switcher.gschema.xml doc/Makefile doc/reference/Makefile doc/reference/mate-panel-applet/Makefile help/Makefile help/mate-clock/Makefile help/mate-fish/Makefile man/Makefile"
+ac_config_files="$ac_config_files Makefile data/Makefile data/theme/Makefile data/org.kiran.panel.gschema.xml data/org.kiran.panel.menubar.gschema.xml data/org.kiran.panel.object.gschema.xml data/org.kiran.panel.toplevel.gschema.xml icons/Makefile icons/16x16/Makefile icons/22x22/Makefile icons/24x24/Makefile icons/32x32/Makefile icons/48x48/Makefile icons/scalable/Makefile mate-panel/Makefile mate-panel/libegg/Makefile mate-panel/libmate-panel-applet-private/Makefile mate-panel/libpanel-util/Makefile mate-panel/wayland-protocols/Makefile libmate-panel-applet/libkiranpanelapplet-4.0.pc libmate-panel-applet/libkiranpanelapplet-4.0-uninstalled.pc libmate-panel-applet/Makefile po/Makefile.in applets/Makefile applets/wncklet/Makefile applets/wncklet/org.kiran.panel.applet.window-list.gschema.xml applets/wncklet/org.kiran.panel.applet.workspace-switcher.gschema.xml doc/Makefile doc/reference/Makefile doc/reference/mate-panel-applet/Makefile man/Makefile"
 
 cat >confcache <<\_ACEOF
 # This file is a shell script that caches the results of configure
@@ -18033,25 +18033,12 @@ do
     "libmate-panel-applet/Makefile") CONFIG_FILES="$CONFIG_FILES libmate-panel-applet/Makefile" ;;
     "po/Makefile.in") CONFIG_FILES="$CONFIG_FILES po/Makefile.in" ;;
     "applets/Makefile") CONFIG_FILES="$CONFIG_FILES applets/Makefile" ;;
-    "applets/clock/Makefile") CONFIG_FILES="$CONFIG_FILES applets/clock/Makefile" ;;
-    "applets/clock/org.kiran.panel.applet.clock.gschema.xml") CONFIG_FILES="$CONFIG_FILES applets/clock/org.kiran.panel.applet.clock.gschema.xml" ;;
-    "applets/clock/pixmaps/Makefile") CONFIG_FILES="$CONFIG_FILES applets/clock/pixmaps/Makefile" ;;
-    "applets/fish/Makefile") CONFIG_FILES="$CONFIG_FILES applets/fish/Makefile" ;;
-    "applets/fish/org.kiran.panel.applet.fish.gschema.xml") CONFIG_FILES="$CONFIG_FILES applets/fish/org.kiran.panel.applet.fish.gschema.xml" ;;
-    "applets/notification_area/Makefile") CONFIG_FILES="$CONFIG_FILES applets/notification_area/Makefile" ;;
-    "applets/notification_area/org.kiran.panel.applet.notification-area.gschema.xml") CONFIG_FILES="$CONFIG_FILES applets/notification_area/org.kiran.panel.applet.notification-area.gschema.xml" ;;
-    "applets/notification_area/libstatus-notifier-watcher/Makefile") CONFIG_FILES="$CONFIG_FILES applets/notification_area/libstatus-notifier-watcher/Makefile" ;;
-    "applets/notification_area/status-notifier/Makefile") CONFIG_FILES="$CONFIG_FILES applets/notification_area/status-notifier/Makefile" ;;
-    "applets/notification_area/system-tray/Makefile") CONFIG_FILES="$CONFIG_FILES applets/notification_area/system-tray/Makefile" ;;
     "applets/wncklet/Makefile") CONFIG_FILES="$CONFIG_FILES applets/wncklet/Makefile" ;;
     "applets/wncklet/org.kiran.panel.applet.window-list.gschema.xml") CONFIG_FILES="$CONFIG_FILES applets/wncklet/org.kiran.panel.applet.window-list.gschema.xml" ;;
     "applets/wncklet/org.kiran.panel.applet.workspace-switcher.gschema.xml") CONFIG_FILES="$CONFIG_FILES applets/wncklet/org.kiran.panel.applet.workspace-switcher.gschema.xml" ;;
     "doc/Makefile") CONFIG_FILES="$CONFIG_FILES doc/Makefile" ;;
     "doc/reference/Makefile") CONFIG_FILES="$CONFIG_FILES doc/reference/Makefile" ;;
     "doc/reference/mate-panel-applet/Makefile") CONFIG_FILES="$CONFIG_FILES doc/reference/mate-panel-applet/Makefile" ;;
-    "help/Makefile") CONFIG_FILES="$CONFIG_FILES help/Makefile" ;;
-    "help/mate-clock/Makefile") CONFIG_FILES="$CONFIG_FILES help/mate-clock/Makefile" ;;
-    "help/mate-fish/Makefile") CONFIG_FILES="$CONFIG_FILES help/mate-fish/Makefile" ;;
     "man/Makefile") CONFIG_FILES="$CONFIG_FILES man/Makefile" ;;
     "po/stamp-it") CONFIG_COMMANDS="$CONFIG_COMMANDS po/stamp-it" ;;
 
