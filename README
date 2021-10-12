@@ -1,5 +1,15 @@
-mate-panel
+kiran-panel
 ===========
+
+kiran-panel is based on mate-panel. Since the start menu and taskbar belong to 
+mate-panel plugins, in order to load kiran start menu and kiran taskbar after 
+entering the kiran desktop environment, and maintain compatibility with the mate
+desktop environment (in other words, both mate-panel and kiran-panel can be 
+installed and run normally without affecting each other), we have modified the
+code of mate-panel. when entering the kiran desktop environment, the kiran-panel
+will be started and the kiran start menu and kiran taskbar will be loaded. when
+entering the mate desktop enviroment, the mate-panel will be started and the mate
+start menu and mate taskbar will be loaded.
 
 mate-panel contains the MATE panel, the libmate-panel-applet library and
 several applets:
