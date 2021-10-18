@@ -186,7 +186,7 @@ main (int argc, char **argv)
 	screen = gdk_screen_get_default ();
 	css = gtk_css_provider_new ();
 	provider = GTK_STYLE_PROVIDER (css);
-	resource = "/org/mate/panel/theme/mate-panel.css";
+	resource = "/org/kiran/panel/theme/mate-panel.css";
 	priority = GTK_STYLE_PROVIDER_PRIORITY_FALLBACK;
 
 	g_signal_connect (provider, "parsing-error", G_CALLBACK (parsing_error_cb), NULL);
