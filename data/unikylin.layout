@@ -1,0 +1,50 @@
+[Toplevel bottom]
+expand=true
+orientation=bottom
+size=40
+screen=0
+
+[Object show-desktop]
+object-type=applet
+applet-iid=WnckletFactory::ShowDesktopApplet
+toplevel-id=bottom
+panel-right-stick=true
+position=0
+locked=true
+
+[Object notification-area]
+object-type=applet
+applet-iid=KiranAppletFactory::KiranTrayApplet
+toplevel-id=bottom
+position=150
+panel-right-stick=true
+locked=true
+
+[Object clock]
+object-type=applet
+applet-iid=KiranClockAppletFactory::KiranClockApplet
+toplevel-id=bottom
+position=10
+panel-right-stick=true
+locked=true
+
+[Object menu]
+object-type=applet
+applet-iid=KiranAppletFactory::KiranMenuApplet
+toplevel-id=bottom
+position=0
+locked=true
+
+[Object workspace-switcher]
+object-type=applet
+applet-iid=KiranAppletFactory::KiranWorkspaceApplet
+toplevel-id=bottom
+position=10
+locked=true
+
+[Object window-list]
+object-type=applet
+applet-iid=KiranAppletFactory::KiranTasklistApplet
+toplevel-id=bottom
+position=20
+locked=true
