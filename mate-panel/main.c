@@ -81,6 +81,8 @@ main (int argc, char **argv)
 	bind_textdomain_codeset (GETTEXT_PACKAGE, "UTF-8");
 	textdomain (GETTEXT_PACKAGE);
 
+	gdk_set_allowed_backends("x11");
+
 	/* We will register explicitly when we're ready -- see panel-session.c */
 	egg_sm_client_set_mode (EGG_SM_CLIENT_MODE_DISABLED);
 

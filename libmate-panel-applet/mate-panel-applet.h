@@ -154,6 +154,7 @@ int main(int argc, char* argv[]) \
 	int retval; \
 	 \
 	_MATE_PANEL_APPLET_SETUP_GETTEXT (TRUE); \
+	gdk_set_allowed_backends("x11"); \
 	 \
 	context = g_option_context_new(""); \
 	g_option_context_add_group (context, gtk_get_option_group(TRUE)); \
