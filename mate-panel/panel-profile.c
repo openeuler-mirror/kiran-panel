@@ -86,6 +86,7 @@ static GQuark commit_timeout_quark = 0;
 
 static void panel_profile_object_id_list_update (gchar **objects);
 static void panel_profile_ensure_toplevel_per_screen (void);
+static GSList* panel_profile_object_id_list(GSettings *panel_settings);
 
 static void
 panel_profile_set_toplevel_id (PanelToplevel *toplevel,
@@ -1554,6 +1555,13 @@ panel_profile_object_id_list_notify (GSettings *settings,
 	gchar **objects;
 	objects = g_settings_get_strv (settings, key);
 	panel_profile_object_id_list_update (objects);
+
+    GSList *object_ids = panel_profile_object_id_list(settings);
+    if (g_slist_length(object_ids) == 0){
+        g_settings_set_strv (settings, PANEL_TOPLEVEL_ID_LIST_KEY, NULL);
+    }
+    g_slist_free (object_ids);
+
 	g_strfreev (objects);
 }
 
@@ -1583,6 +1591,19 @@ panel_profile_load_list (GSettings              *settings,
 		g_strfreev (list);
 }
 
+static GSList*
+panel_profile_object_id_list(GSettings *panel_settings) {
+    gchar **objects = g_settings_get_strv(panel_settings, PANEL_OBJECT_ID_LIST_KEY);
+
+    GSList *object_ids;
+    object_ids = mate_gsettings_strv_to_gslist ((const gchar **) objects);
+    object_ids = panel_g_slist_make_unique (object_ids,
+                                            (GCompareFunc) g_strcmp0,
+                                            FALSE);
+    g_strfreev(objects);
+    return object_ids;
+}
+
 static void
 panel_profile_ensure_toplevel_per_screen ()
 {
@@ -1608,7 +1629,15 @@ panel_profile_ensure_toplevel_per_screen ()
 	for (l = empty_screens; l; l = l->next)
 		panel_layout_apply_default_from_gkeyfile (l->data);
 
-	g_slist_free (empty_screens);
+    GSettings *panel_settings = g_settings_new (PANEL_SCHEMA);
+    GSList *object_ids = panel_profile_object_id_list(panel_settings);
+    if (g_slist_length(object_ids) == 0){
+        g_settings_set_strv (panel_settings, PANEL_TOPLEVEL_ID_LIST_KEY, NULL);
+    }
+    g_slist_free (object_ids);
+    g_object_unref(panel_settings);
+
+    g_slist_free (empty_screens);
 }
 
 void
