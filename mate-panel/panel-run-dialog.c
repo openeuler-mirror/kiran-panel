@@ -793,6 +793,18 @@ get_all_applications_from_alias (MateMenuTreeAlias *alias,
 	return list;
 }
 
+static gboolean is_kiran_nodisplay(MateMenuTreeEntry *entry)
+{
+	GDesktopAppInfo *info = matemenu_tree_entry_get_app_info(entry);
+
+	if (g_desktop_app_info_has_key(info, "X-KIRAN-NoDisplay"))
+	{
+		return g_desktop_app_info_get_boolean(info, "X-KIRAN-NoDisplay");
+	}
+
+	return FALSE;
+}
+
 static GSList *
 get_all_applications_from_dir (MateMenuTreeDirectory *directory,
 			       GSList             *list)
@@ -806,7 +818,14 @@ get_all_applications_from_dir (MateMenuTreeDirectory *directory,
 		switch (type) {
 			case MATEMENU_TREE_ITEM_ENTRY:
 				item = matemenu_tree_iter_get_entry (iter);
-				list = g_slist_append (list, (MateMenuTreeEntry*) item);
+				if (FALSE == is_kiran_nodisplay((MateMenuTreeEntry *)item))
+				{
+					list = g_slist_append(list, (MateMenuTreeEntry *)item);
+				}
+				else
+				{
+					matemenu_tree_item_unref(item);
+				}
 				break;
 
 			case MATEMENU_TREE_ITEM_DIRECTORY:
