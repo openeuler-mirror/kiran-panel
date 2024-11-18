@@ -1323,7 +1323,7 @@ panel_ditem_editor_save (PanelDItemEditor *dialog,
 	if (!dialog->priv->dirty)
 		return TRUE;
 
-	/* Verify that the required informations are set */
+	/* Verify that the required information are set */
 	const_buf = gtk_entry_get_text (GTK_ENTRY (dialog->priv->name_entry));
 	if (const_buf == NULL || const_buf [0] == '\0') {
 		if (report_errors) {

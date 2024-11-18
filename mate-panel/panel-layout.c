@@ -356,7 +356,7 @@ panel_layout_apply_default_from_gkeyfile (GdkScreen *screen)
 
     }
     else {
-        g_warning ("Cant find the layout file!");
+        g_warning ("Can't find the layout file!");
         /* FIXME implement a fallback panel */
     }
 
