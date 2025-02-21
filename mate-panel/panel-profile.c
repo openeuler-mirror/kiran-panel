@@ -33,7 +33,6 @@
 #include <glib/gi18n.h>
 #include <gio/gio.h>
 #include <gdk/gdkx.h>
-#include <sys/file.h>
 
 #include <libpanel-util/panel-list.h>
 #include <libmate-desktop/mate-dconf.h>
@@ -47,8 +46,6 @@
 #include "panel-toplevel.h"
 #include "panel-lockdown.h"
 #include "panel-schemas.h"
-
-#define APPLY_DEFAULT_GKEY_LOCK_FILE "/tmp/apply_default_gkey_lock"
 
 typedef struct {
 	GdkScreen       *screen;
@@ -1607,33 +1604,6 @@ panel_profile_object_id_list(GSettings *panel_settings) {
     return object_ids;
 }
 
-static void layout_apply_default_from_gkeyfile(GdkScreen *screen)
-{
-	// APPLY_DEFAULT_GKEY_LOCK_FILE 文件用于进程间锁定
-	// flock(lock_fd, LOCK_EX) 确保多个进程不会同时写入 GSettings
-	int lock_fd = open(APPLY_DEFAULT_GKEY_LOCK_FILE, O_CREAT | O_RDWR, 0666);
-	if (lock_fd == -1)
-	{
-		g_warning("open lock file failed");
-		return;
-	}
-	// 试图加锁（默认阻塞）
-	if (flock(lock_fd, LOCK_EX) == -1)
-	{
-		g_warning("flock failed");
-		close(lock_fd);
-		return;
-	}
-
-	// 使用layouts文件进行重置GSettings
-	panel_layout_apply_default_from_gkeyfile(screen);
-	g_settings_sync();
-
-	// 释放锁
-	flock(lock_fd, LOCK_UN);
-	close(lock_fd);
-}
-
 static void
 panel_profile_ensure_toplevel_per_screen ()
 {
@@ -1657,7 +1627,7 @@ panel_profile_ensure_toplevel_per_screen ()
 		empty_screens = g_slist_prepend (empty_screens, screen);
 
 	for (l = empty_screens; l; l = l->next)
-		layout_apply_default_from_gkeyfile(l->data);
+		panel_layout_apply_default_from_gkeyfile(l->data);
 
     GSettings *panel_settings = g_settings_new (PANEL_SCHEMA);
     GSList *object_ids = panel_profile_object_id_list(panel_settings);
