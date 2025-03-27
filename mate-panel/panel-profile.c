@@ -1576,19 +1576,31 @@ panel_profile_load_list (GSettings              *settings,
 	gchar  *changed_signal;
 	gchar **list;
 	gint    i;
+	GSList	**id_list = NULL;
+	GSList	*l;
 
 	changed_signal = g_strdup_printf ("changed::%s", key);
 	g_signal_connect (settings, changed_signal, G_CALLBACK (notify_handler), NULL);
 	g_free (changed_signal);
 
 	list = g_settings_get_strv (settings, key);
+	if (list) {
+		id_list = mate_gsettings_strv_to_gslist ((const gchar **) list);
+		if (id_list) {
+			id_list = panel_g_slist_make_unique (id_list, (GCompareFunc) g_strcmp0, TRUE);
+			for (l = id_list; l; l = l->next) {
+				const char *id = l->data;
+				load_handler (id);
+			}
 
-	for (i = 0; list[i]; i++) {
-		load_handler (list[i]);
+			g_slist_free_full (id_list, g_free);
+		}
+
+
+		g_strfreev (list);
 	}
 
-	if (list)
-		g_strfreev (list);
+
 }
 
 static GSList*
