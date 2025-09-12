@@ -144,6 +144,10 @@ kiran_panel_CPPFLAGS += \
 	$(WAYLAND_CFLAGS)
 endif
 
+if ENABLE_TASKBAR_SHOW_DESKTOP
+kiran_panel_CPPFLAGS += \
+	$(WNCKLET_CFLAGS)
+endif
 
 kiran_panel_LDADD = \
 	$(top_builddir)/mate-panel/libegg/libegg.la \
@@ -158,6 +162,11 @@ kiran_panel_LDADD = \
 if ENABLE_WAYLAND
 kiran_panel_LDADD += \
 	$(WAYLAND_LIBS)
+endif
+
+if ENABLE_TASKBAR_SHOW_DESKTOP
+kiran_panel_LDADD += \
+	$(WNCKLET_LIBS)
 endif
 
 kiran_panel_LDFLAGS = -export-dynamic
