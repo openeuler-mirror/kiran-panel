@@ -2489,6 +2489,12 @@ msgstr "新建面板(_N)"
 msgid "A_bout Panels"
 msgstr "关于面板(_B)"
 
+msgid "_Show Desktop"
+msgstr "显示桌面(_S)"
+
+msgid "_Restore Windows"
+msgstr "恢复窗口(_S)"
+
 #: ../mate-panel/panel-ditem-editor.c:115
 msgid "Application"
 msgstr "应用程序"
