@@ -60,6 +60,72 @@ enum {
 /*we call this recursively*/
 static void orient_change_foreach(GtkWidget *w, gpointer data);
 
+#ifdef ENABLE_TASKBAR_SHOW_DESKTOP
+#define WNCK_I_KNOW_THIS_IS_UNSTABLE
+#include <libwnck/libwnck.h>
+
+void panel_set_showing_desktop(PanelWidget *panel_widget ,gboolean showing_desktop)
+{
+	gboolean is_showing_desktop;
+	WnckScreen *wnck_screen;
+	GdkScreen *screen;
+
+	screen = panel_screen_from_panel_widget(panel_widget);
+	
+	// 判断是否支持显示桌面
+	if (!gdk_x11_screen_supports_net_wm_hint (screen, gdk_atom_intern ("_NET_SHOWING_DESKTOP", FALSE)))
+	{
+		g_warning ("Your window manager does not support the show desktop, or you are not running a window manager.");
+		return;
+	}
+
+	wnck_screen = g_object_get_data (G_OBJECT (panel_widget->toplevel), "WnckScreen");
+	if (!wnck_screen)
+	{
+		g_warning("Could not get WnckScreen!");
+		return;
+	}
+
+	is_showing_desktop = wnck_screen_get_showing_desktop (wnck_screen);
+	if	(is_showing_desktop != showing_desktop)
+	{
+		wnck_screen_toggle_showing_desktop(wnck_screen, showing_desktop);
+	}
+}
+
+gboolean panel_get_showing_desktop(PanelWidget *panel_widget)
+{
+	WnckScreen *wnck_screen;
+
+	wnck_screen = g_object_get_data (G_OBJECT (panel_widget->toplevel), "WnckScreen");
+	if (!wnck_screen)
+	{
+		g_warning("Could not get WnckScreen!");
+		return FALSE;
+	}
+	
+	return wnck_screen_get_showing_desktop (wnck_screen);
+}
+
+void show_desktop_changed_callback(WnckScreen *wnck_screen, PanelWidget *panel_widget)
+{
+	PanelData *pd;
+	gboolean is_showing_desktop;
+
+	if (!wnck_screen)
+	{
+		g_warning("Could not get WnckScreen!");
+		return;
+	}
+
+	pd = g_object_get_data (G_OBJECT (panel_widget->toplevel), "PanelData");
+
+	is_showing_desktop = wnck_screen_get_showing_desktop (wnck_screen);
+
+	// 更新显示桌面菜单项标签
+	panel_context_menu_update_show_desktop_item (pd->menu, is_showing_desktop);
+}
+#endif
 void
 orientation_change (AppletInfo  *info,
 		    PanelWidget *panel)
@@ -264,6 +330,19 @@ static void
 panel_destroy (PanelToplevel *toplevel,
 	       PanelData     *pd)
 {
+#ifdef ENABLE_TASKBAR_SHOW_DESKTOP
+	WnckScreen *wnck_screen;
+
+	wnck_screen = g_object_get_data (G_OBJECT (toplevel), "WnckScreen");
+	if (wnck_screen)
+	{
+		g_signal_handlers_disconnect_by_func (wnck_screen, 
+						show_desktop_changed_callback, 
+						panel_toplevel_get_panel_widget (toplevel));
+		
+	}
+	g_object_set_data (G_OBJECT (toplevel), "WnckScreen", NULL);
+#endif
 	panel_lockdown_notify_remove (G_CALLBACK (panel_recreate_context_menu),
 				      pd);
 
@@ -1214,6 +1293,26 @@ panel_setup (PanelToplevel *toplevel)
 	panel_list = g_slist_append (panel_list, pd);
 	
 	g_object_set_data (G_OBJECT (toplevel), "PanelData", pd);
+
+#ifdef ENABLE_TASKBAR_SHOW_DESKTOP
+	GdkScreen* screen;
+	WnckScreen *wnck_screen;
+	
+	screen = panel_screen_from_panel_widget(panel_widget);
+	wnck_screen = wnck_screen_get(gdk_x11_screen_get_screen_number (screen));
+
+	if (wnck_screen != NULL)
+	{
+		g_object_set_data (G_OBJECT (toplevel), "WnckScreen", wnck_screen);
+		g_signal_connect (wnck_screen, "showing_desktop_changed",
+				  G_CALLBACK (show_desktop_changed_callback),
+				  panel_widget);
+	}
+	else
+	{
+		g_warning("Could not get WnckScreen!");
+	}
+#endif
 
 	panel_lockdown_notify_add (G_CALLBACK (panel_recreate_context_menu),
 				   pd);

@@ -30,4 +30,8 @@
 
 GtkWidget *panel_context_menu_create (PanelWidget *panel);
 
+#ifdef ENABLE_TASKBAR_SHOW_DESKTOP
+void panel_context_menu_update_show_desktop_item (GtkWidget *menu, gboolean showing_desktop);
+#endif
+
 #endif /* __PANEL_CONTEXT_MENU_H__ */
