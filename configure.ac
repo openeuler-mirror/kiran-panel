@@ -226,6 +226,18 @@ fi
 
 AC_SUBST(X_LIBS)
 
+AC_ARG_ENABLE(taskbar-show-desktop,
+              [AC_HELP_STRING([--enable-taskbar-show-desktop],
+                              [Enable show desktop feature in taskbar @<:@default=no@:>@])],
+              [enable_taskbar_show_desktop=$enableval],
+              [enable_taskbar_show_desktop=no])
+
+if test "x$enable_taskbar_show_desktop" = "xyes"; then
+  AC_DEFINE([ENABLE_TASKBAR_SHOW_DESKTOP], 1, [Define to enable show desktop feature in taskbar])
+fi
+
+AM_CONDITIONAL(ENABLE_TASKBAR_SHOW_DESKTOP, test "x$enable_taskbar_show_desktop" = "xyes")
+
 dnl X RANDR extension
 
 PKG_CHECK_MODULES(XRANDR, xrandr >= 1.3.0, have_randr=yes, have_randr=no)

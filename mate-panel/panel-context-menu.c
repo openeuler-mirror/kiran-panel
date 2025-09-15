@@ -50,6 +50,121 @@
 #include "panel-icon-names.h"
 #include "panel-reset.h"
 
+#ifdef ENABLE_TASKBAR_SHOW_DESKTOP
+void 
+panel_context_menu_update_item_label (GtkWidget *item, const gchar *label_name)
+{
+	GtkWidget *box;
+	GtkWidget *label_menu;
+	GList *children;
+	GList *l;
+	gchar *concat;
+
+	g_return_if_fail (GTK_IS_MENU_ITEM (item));
+
+	// 获取菜单项中的box容器
+	box = gtk_bin_get_child (GTK_BIN (item));
+	if (!box || !GTK_IS_BOX (box))
+		return;
+
+	// 获取box中的所有子控件
+	children = gtk_container_get_children (GTK_CONTAINER (box));
+	if (!children)
+		return;
+
+	// 遍历所有子控件，查找标签控件
+	for (l = children; l != NULL; l = l->next)
+	{
+		if (GTK_IS_LABEL (l->data))
+		{
+			label_menu = GTK_WIDGET(l->data);
+			
+			// 更新标签文本
+			concat = g_strconcat (label_name, "     ", NULL);
+			gtk_label_set_text_with_mnemonic (GTK_LABEL (label_menu), concat);
+			g_free (concat);
+			
+			// 找到并更新第一个标签后退出循环
+			break;
+		}
+	}
+
+	g_list_free (children);
+}
+
+static GtkWidget *
+panel_context_menu_find_show_desktop_item (GtkWidget *menu)
+{
+	GList *children, *l;
+	GtkWidget *show_desktop_item;
+
+	g_return_if_fail (GTK_IS_MENU (menu));
+	
+	show_desktop_item = NULL;
+
+	// 获取菜单的所有子项
+	children = gtk_container_get_children (GTK_CONTAINER (menu));
+	
+	// 遍历菜单项
+	for (l = children; l != NULL; l = l->next) {
+		GtkWidget *menuitem = GTK_WIDGET (l->data);
+		
+		// 检查是否为显示桌面的菜单项
+		if (g_object_get_data (G_OBJECT (menuitem), "is-show-desktop-item")) {
+			show_desktop_item = menuitem;
+			break;
+		}
+	}
+	
+	g_list_free (children);
+	
+	return show_desktop_item;
+}
+
+void
+panel_context_menu_update_show_desktop_item (GtkWidget *menu, gboolean showing_desktop)
+{
+	GtkWidget *show_desktop_item;
+
+	if (!menu)
+		return;
+
+	show_desktop_item = panel_context_menu_find_show_desktop_item (menu);
+	if (!show_desktop_item)
+	{
+		g_message ("Don't find show desktop item.");
+		return;
+	}
+
+	if (showing_desktop)
+	{
+		panel_context_menu_update_item_label (GTK_MENU_ITEM (show_desktop_item), _("_Restore Windows"));
+	}
+	else
+	{
+		panel_context_menu_update_item_label (GTK_MENU_ITEM (show_desktop_item), _("_Show Desktop"));
+	}
+}
+
+static void
+panel_context_menu_show_desktop (GtkWidget *w,
+								 gpointer data)
+{
+	GdkScreen *screen;
+	gboolean is_showing_desktop;
+
+	PanelWidget *panel = data;
+	if (!panel)
+		return;
+
+	// 获取当前桌面显示状态
+	is_showing_desktop = panel_get_showing_desktop (panel);
+
+	// 设置桌面显示状态
+	panel_set_showing_desktop (panel, !is_showing_desktop);
+}
+#endif
+
 static void
 panel_context_menu_show_help (GtkWidget *w,
 			      gpointer data)
@@ -314,6 +429,24 @@ panel_context_menu_create (PanelWidget *panel)
 
 	if (!panel_lockdown_get_locked_down ())
 		panel_context_menu_build_edition (panel, retval);
+
+#ifdef ENABLE_TASKBAR_SHOW_DESKTOP
+	char *show_desktop_label;
+	gboolean showing_desktop;
+
+	showing_desktop = panel_get_showing_desktop(panel);
+	show_desktop_label = showing_desktop ? g_strdup (_("_Restore Windows")) : g_strdup (_("_Show Desktop"));
+
+	menuitem = panel_image_menu_item_new_from_icon ("user-desktop", show_desktop_label);
+	g_object_set_data (G_OBJECT (menuitem), "is-show-desktop-item", GINT_TO_POINTER (1));
+	
+	gtk_widget_show (menuitem);
+	gtk_menu_shell_append (GTK_MENU_SHELL (retval), menuitem);
+	g_signal_connect (menuitem, "activate",
+			  G_CALLBACK (panel_context_menu_show_desktop), panel);
+	
+	g_free (show_desktop_label);
+#endif
 
 	menuitem = panel_image_menu_item_new_from_icon ("help-browser", _("_Help"));
 

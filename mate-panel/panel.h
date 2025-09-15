@@ -50,6 +50,11 @@ void panel_delete (PanelToplevel *toplevel);
 
 GtkWidget  *panel_deletion_dialog  (PanelToplevel *toplevel);
 
+#ifdef ENABLE_TASKBAR_SHOW_DESKTOP
+void panel_set_showing_desktop (PanelWidget *panel_widget, gboolean showing_desktop);
+gboolean panel_get_showing_desktop (PanelWidget *panel_widget);
+#endif
+
 #ifdef __cplusplus
 }
 #endif
