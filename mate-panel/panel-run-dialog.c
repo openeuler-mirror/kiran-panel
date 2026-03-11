@@ -476,6 +476,8 @@ panel_run_dialog_execute (PanelRunDialog *dialog)
 				    "cannot_convert_command_from_utf8", TRUE,
 				    primary, error->message);
 		g_free (primary);
+		g_free (command);
+		g_free (disk);
 
 		g_error_free (error);
 		return;
