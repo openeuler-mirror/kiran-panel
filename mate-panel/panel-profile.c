@@ -1560,7 +1560,7 @@ panel_profile_object_id_list_notify (GSettings *settings,
     if (g_slist_length(object_ids) == 0){
         g_settings_set_strv (settings, PANEL_TOPLEVEL_ID_LIST_KEY, NULL);
     }
-    g_slist_free (object_ids);
+    g_slist_free_full (object_ids, g_free);
 
 	g_strfreev (objects);
 }
@@ -1646,7 +1646,7 @@ panel_profile_ensure_toplevel_per_screen ()
     if (g_slist_length(object_ids) == 0){
         g_settings_set_strv (panel_settings, PANEL_TOPLEVEL_ID_LIST_KEY, NULL);
     }
-    g_slist_free (object_ids);
+    g_slist_free_full (object_ids, g_free);
     g_object_unref(panel_settings);
 
     g_slist_free (empty_screens);
