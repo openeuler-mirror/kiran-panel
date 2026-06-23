@@ -52,6 +52,8 @@
 
 G_DEFINE_TYPE (PanelToplevel, panel_toplevel, GTK_TYPE_WINDOW)
 
+static gboolean panel_global_filter_installed = FALSE;
+
 #define PANEL_TOPLEVEL_GET_PRIVATE(o) (G_TYPE_INSTANCE_GET_PRIVATE ((o), PANEL_TYPE_TOPLEVEL, PanelToplevelPrivate))
 
 #define DEFAULT_SIZE              48
@@ -199,6 +201,8 @@ struct _PanelToplevelPrivate {
 	guint                   updated_geometry_initial : 1;
 	/* flag to see if we have done the initial animation */
 	guint                   initial_animation_done : 1;
+
+	guint                   poll_id;
 };
 
 enum {
@@ -242,6 +246,9 @@ static guint toplevel_signals[LAST_SIGNAL] = {0};
 static GSList* toplevel_list = NULL;
 
 static void panel_toplevel_calculate_animation_end_geometry(PanelToplevel *toplevel);
+
+static GdkFilterReturn panel_toplevel_global_root_filter (GdkXEvent *, GdkEvent *, gpointer);
+static gboolean       panel_toplevel_poll_pointer         (PanelToplevel *toplevel);
 
 static void panel_toplevel_update_monitor(PanelToplevel* toplevel);
 static void panel_toplevel_set_monitor_internal(PanelToplevel* toplevel, int monitor, gboolean force_resize);
@@ -3071,6 +3078,27 @@ panel_toplevel_realize (GtkWidget *widget)
 	panel_toplevel_initially_hide (toplevel);
 
 	panel_toplevel_move_resize_window (toplevel, TRUE, TRUE);
+
+	/* polling fallback: periodically check pointer to handle cases
+	 * where enter/leave events are lost during pointer grabs */
+	toplevel->priv->poll_id = g_timeout_add (400,
+		(GSourceFunc) panel_toplevel_poll_pointer, toplevel);
+
+	/* global event filter on root window for motion/button/touch */
+	{
+		GdkScreen *screen = gtk_widget_get_screen (widget);
+		GdkWindow *root = gdk_screen_get_root_window (screen);
+		gdk_window_set_events (root,
+			gdk_window_get_events (root) |
+				GDK_POINTER_MOTION_MASK |
+				GDK_BUTTON_PRESS_MASK |
+				GDK_TOUCH_MASK);
+		if (!panel_global_filter_installed) {
+			gdk_window_add_filter (NULL,
+				panel_toplevel_global_root_filter, NULL);
+			panel_global_filter_installed = TRUE;
+		}
+	}
 }
 
 static void
@@ -3087,6 +3115,10 @@ panel_toplevel_disconnect_timeouts (PanelToplevel *toplevel)
 	if (toplevel->priv->animation_timeout)
 		g_source_remove (toplevel->priv->animation_timeout);
 	toplevel->priv->animation_timeout = 0;
+
+	if (toplevel->priv->poll_id)
+		g_source_remove (toplevel->priv->poll_id);
+	toplevel->priv->poll_id = 0;
 }
 
 static void
@@ -3798,6 +3830,77 @@ panel_toplevel_hide (PanelToplevel    *toplevel,
         }
 
 	gtk_widget_queue_resize (GTK_WIDGET (toplevel));
+}
+
+static GdkFilterReturn
+panel_toplevel_global_root_filter (GdkXEvent *xevent,
+				   GdkEvent  *event,
+				   gpointer   data)
+{
+	GdkEventType type;
+	GSList      *l;
+
+	if (!event)
+		return GDK_FILTER_CONTINUE;
+
+	type = ((GdkEventAny *) event)->type;
+	if (type != GDK_MOTION_NOTIFY &&
+	    type != GDK_BUTTON_PRESS  &&
+	    type != GDK_TOUCH_BEGIN)
+		return GDK_FILTER_CONTINUE;
+
+	/* panel_toplevel_list_toplevels() returns the internal list,
+	 * do NOT free it */
+	for (l = panel_toplevel_list_toplevels (); l; l = l->next) {
+		PanelToplevel *t = PANEL_TOPLEVEL (l->data);
+
+		if (!t->priv->auto_hide)
+			continue;
+
+		if (!gtk_widget_get_realized (GTK_WIDGET (t)))
+			continue;
+
+		switch (type) {
+		case GDK_MOTION_NOTIFY:
+			if (panel_toplevel_contains_pointer (t) &&
+			    t->priv->state == PANEL_STATE_AUTO_HIDDEN)
+				panel_toplevel_queue_auto_unhide (t);
+			break;
+		case GDK_BUTTON_PRESS:
+		case GDK_TOUCH_BEGIN: {
+			gboolean inside = panel_toplevel_contains_pointer (t);
+			if (inside && t->priv->state == PANEL_STATE_AUTO_HIDDEN)
+				panel_toplevel_queue_auto_unhide (t);
+			else if (!inside && t->priv->state == PANEL_STATE_NORMAL)
+				panel_toplevel_queue_auto_hide (t);
+			break;
+		}
+		default:
+			break;
+		}
+	}
+
+	return GDK_FILTER_CONTINUE;
+}
+
+static gboolean
+panel_toplevel_poll_pointer (PanelToplevel *toplevel)
+{
+	if (!toplevel->priv->auto_hide)
+		return G_SOURCE_CONTINUE;
+
+	gboolean pointer_over = panel_toplevel_contains_pointer (toplevel);
+
+	if (pointer_over &&
+	    toplevel->priv->state == PANEL_STATE_AUTO_HIDDEN) {
+		panel_toplevel_queue_auto_unhide (toplevel);
+	} else if (!pointer_over &&
+		   toplevel->priv->state == PANEL_STATE_NORMAL &&
+		   !panel_toplevel_get_autohide_disabled (toplevel)) {
+		panel_toplevel_queue_auto_hide (toplevel);
+	}
+
+	return G_SOURCE_CONTINUE;
 }
 
 static gboolean
