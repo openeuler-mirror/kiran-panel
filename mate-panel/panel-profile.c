@@ -1611,7 +1611,7 @@ panel_profile_object_id_list(GSettings *panel_settings) {
     object_ids = mate_gsettings_strv_to_gslist ((const gchar **) objects);
     object_ids = panel_g_slist_make_unique (object_ids,
                                             (GCompareFunc) g_strcmp0,
-                                            FALSE);
+                                            TRUE);
     g_strfreev(objects);
     return object_ids;
 }
