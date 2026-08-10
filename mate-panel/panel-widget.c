@@ -1298,6 +1298,7 @@ panel_widget_get_preferred_size(GtkWidget	     *widget,
 			panel->applets_using_hint = g_new0 (AppletSizeHintsAlloc, panel->nb_applets_size_hints);
 		}
 	}
+	g_list_free (ad_with_hints);
 	
 	dont_fill = panel->packed && panel->nb_applets_size_hints != 0;
 

@@ -1476,7 +1476,7 @@ panel_profile_toplevel_id_list_notify (GSettings *settings,
 	toplevel_ids = mate_gsettings_strv_to_gslist ((const gchar **) toplevel_ids_strv);
 	toplevel_ids = panel_g_slist_make_unique (toplevel_ids,
 						  (GCompareFunc) g_strcmp0,
-						  FALSE);
+						  TRUE);
 	g_strfreev (toplevel_ids_strv);
 
 	existing_toplevels = NULL;
@@ -1507,7 +1507,7 @@ panel_profile_toplevel_id_list_notify (GSettings *settings,
 		g_idle_add (load_default_layout_idle, NULL);
 
 	g_slist_free (existing_toplevels);
-	g_slist_free (toplevel_ids);
+	g_slist_free_full (toplevel_ids, g_free);
 }
 
 static void
@@ -1520,7 +1520,7 @@ panel_profile_object_id_list_update (gchar **objects)
 	object_ids = mate_gsettings_strv_to_gslist ((const gchar **) objects);
 	object_ids = panel_g_slist_make_unique (object_ids,
 						(GCompareFunc) g_strcmp0,
-						FALSE);
+						TRUE);
 
 	existing_applets = mate_panel_applet_list_applets ();
 
@@ -1542,7 +1542,7 @@ panel_profile_object_id_list_update (gchar **objects)
 									  (PanelProfileDestroyFunc) panel_profile_destroy_object);
 
 	g_slist_free (sublist);
-	g_slist_free (object_ids);
+	g_slist_free_full (object_ids, g_free);
 
 	mate_panel_applet_load_queued_applets (FALSE);
 }
@@ -1611,7 +1611,7 @@ panel_profile_object_id_list(GSettings *panel_settings) {
     object_ids = mate_gsettings_strv_to_gslist ((const gchar **) objects);
     object_ids = panel_g_slist_make_unique (object_ids,
                                             (GCompareFunc) g_strcmp0,
-                                            FALSE);
+                                            TRUE);
     g_strfreev(objects);
     return object_ids;
 }

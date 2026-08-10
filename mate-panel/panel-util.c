@@ -846,6 +846,7 @@ panel_util_get_file_display_name_if_mount (GFile *file)
 		compare = g_mount_get_root (mount);
 		if (!ret && g_file_equal (file, compare))
 			ret = g_mount_get_name (mount);
+		g_object_unref (compare);
 		g_object_unref (mount);
 	}
 	g_list_free (mounts);
@@ -967,6 +968,7 @@ panel_util_get_file_icon_name_if_mount (GFile *file)
 			ret = panel_util_get_icon_name_from_g_icon (gicon);
 			g_object_unref (gicon);
 		}
+		g_object_unref (compare);
 		g_object_unref (mount);
 	}
 	g_list_free (mounts);
