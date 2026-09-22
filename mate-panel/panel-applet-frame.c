@@ -42,6 +42,7 @@
 #include "panel-marshal.h"
 #include "panel-background.h"
 #include "panel-lockdown.h"
+#include "panel-session.h"
 #include "panel-stock-icons.h"
 #include "xstuff.h"
 #include "panel-schemas.h"
@@ -74,6 +75,84 @@ struct _MatePanelAppletFrameActivating {
 	int 	     tries;
 };
 
+/* 插件崩溃自动恢复机制。
+ *
+ * 进程外插件意外退出时对用户保持透明：在原位置重新拉起插件，不弹窗、不抢占
+ * 焦点。为保证恢复行为收敛，只有在 APPLET_RECOVERY_WINDOW_USEC 时间窗内崩溃
+ * 次数不超过 APPLET_RECOVERY_MAX_CRASHES 时才静默重启；超过该上限后停止自动
+ * 重启，复用原有“插件意外退出”弹窗询问用户。 */
+#define APPLET_RECOVERY_WINDOW_USEC      (60 * G_USEC_PER_SEC)  /* 崩溃计数时间窗 */
+#define APPLET_RECOVERY_MAX_CRASHES      2                      /* 静默自动恢复的次数上限 */
+#define APPLET_RECOVERY_RESTART_DELAY_MS 500                   /* 重启延迟，避免紧循环 */
+
+/* 单个插件的崩溃恢复状态（按 gsettings 对象 id 区分） */
+typedef struct {
+	gint64   last_crash;  /* 最近一次崩溃的时间戳 */
+	guint    crashes;     /* 时间窗内的崩溃次数 */
+} AppletRecoveryState;
+
+/* id -> AppletRecoveryState*，生命周期与面板进程一致 */
+static GHashTable *recovery_states = NULL;
+
+static GSList *no_reload_applets = NULL;
+
+/* 获取（不存在则创建）指定插件的恢复状态 */
+static AppletRecoveryState *
+get_recovery_state (const char *id)
+{
+	AppletRecoveryState *state;
+
+	if (!id)
+		return NULL;
+
+	if (!recovery_states)
+		recovery_states = g_hash_table_new_full (g_str_hash, g_str_equal,
+							 g_free, g_free);
+
+	state = g_hash_table_lookup (recovery_states, id);
+	if (!state) {
+		state = g_new0 (AppletRecoveryState, 1);
+		g_hash_table_insert (recovery_states, g_strdup (id), state);
+	}
+
+	return state;
+}
+
+/* 用户手动重试后重置崩溃计数，给予新一轮自动恢复机会 */
+static void
+reset_recovery_state (const char *id)
+{
+	AppletRecoveryState *state = get_recovery_state (id);
+
+	if (state) {
+		state->crashes = 0;
+		state->last_crash = 0; 
+	}
+}
+
+/* 插件被永久删除时清理其恢复状态与禁重载记录。
+ * 插件 id（object-N）在删除后会被回收给新插件，若不清理，新插件会继承
+ * 旧的崩溃计数或“不再自动恢复”标记。 */
+void
+_mate_panel_applet_frame_forget_recovery (const char *id)
+{
+	GSList *item;
+
+	if (!id)
+		return;
+
+	g_message("panel-applet: applet %s is deleted, clean up recovery state and no reload list", id);
+
+	if (recovery_states)
+		g_hash_table_remove (recovery_states, id);
+
+	item = g_slist_find_custom (no_reload_applets, id, (GCompareFunc) strcmp);
+	if (item) {
+		g_free (item->data);
+		no_reload_applets = g_slist_delete_link (no_reload_applets, item);
+	}
+}
+
 /* MatePanelAppletFrame implementation */
 
 G_DEFINE_TYPE (MatePanelAppletFrame, mate_panel_applet_frame, GTK_TYPE_EVENT_BOX)
@@ -94,8 +173,59 @@ struct _MatePanelAppletFramePrivate {
 	GtkAllocation    child_allocation;
 	GdkRectangle     handle_rect;
 
+	guint            recovery_source_id;  /* 待执行的崩溃恢复定时器 id，0 表示无 */
+
 	guint            has_handle : 1;
 };
+
+/* 在原位置重新加载插件：先销毁旧 frame（保留 id/位置/锁定状态），
+ * 再通过 mate_panel_applet_frame_load 在同一位置重建。 */
+static void
+mate_panel_applet_frame_reload (MatePanelAppletFrame *frame)
+{
+	PanelWidget *panel;
+	AppletInfo  *info;
+	char        *iid;
+	char        *id = NULL;
+	int          position = -1;
+	gboolean     locked = FALSE;
+
+	if (!frame->priv->iid || !frame->priv->panel || !frame->priv->applet_info)
+		return;
+
+	panel = frame->priv->panel;
+	iid   = g_strdup (frame->priv->iid);
+	info  = frame->priv->applet_info;
+
+	id       = g_strdup (info->id);
+	position = mate_panel_applet_get_position (info);
+	locked   = panel_widget_get_applet_locked (panel, info->widget);
+	mate_panel_applet_clean (info);
+
+	/* 在同一位置重新挂载插件 */
+	mate_panel_applet_frame_load (iid, panel, locked, position, TRUE, id);
+
+	g_free (iid);
+	g_free (id);
+}
+
+/* 恢复定时器回调：执行静默重启。先清空 id 以免重载销毁 frame 时重复移除。 */
+static gboolean
+mate_panel_applet_frame_recovery_timeout (gpointer user_data)
+{
+	MatePanelAppletFrame *frame = MATE_PANEL_APPLET_FRAME (user_data);
+
+	frame->priv->recovery_source_id = 0;
+
+	/* frame 可能已被销毁，重新确认其仍然有效 */
+	if (frame->priv->applet_info && frame->priv->panel) {
+          g_message("panel-applet: '%s' silent recovery, auto-restarting",
+                    frame->priv->applet_info->id);
+          mate_panel_applet_frame_reload(frame);
+	}
+
+	return G_SOURCE_REMOVE;
+}
 
 static gboolean
 mate_panel_applet_frame_draw (GtkWidget *widget,
@@ -466,14 +596,36 @@ mate_panel_applet_frame_class_init (MatePanelAppletFrameClass *klass)
 }
 
 static void
+mate_panel_applet_frame_destroyed (GtkWidget *widget,
+				   gpointer   user_data)
+{
+	MatePanelAppletFrame *frame = MATE_PANEL_APPLET_FRAME (widget);
+
+	if (frame->priv->recovery_source_id != 0) {
+		g_source_remove (frame->priv->recovery_source_id);
+		frame->priv->recovery_source_id = 0;
+	}
+
+	/* AppletInfo 由其自身的 destroy 处理器释放，这里先行清空指针；
+	 * panel 也可能随面板重置/销毁而失效，一并清空，确保恢复定时器
+	 * 回调里的 `applet_info && panel` 判断在 frame 销毁后必然失败。 */
+	frame->priv->applet_info = NULL;
+	frame->priv->panel = NULL;
+}
+
+static void
 mate_panel_applet_frame_init (MatePanelAppletFrame *frame)
 {
 	frame->priv = MATE_PANEL_APPLET_FRAME_GET_PRIVATE (frame);
 
-	frame->priv->panel       = NULL;
-	frame->priv->orientation = PANEL_ORIENTATION_TOP;
-	frame->priv->applet_info = NULL;
-	frame->priv->has_handle  = FALSE;
+	frame->priv->panel              = NULL;
+	frame->priv->orientation        = PANEL_ORIENTATION_TOP;
+	frame->priv->applet_info        = NULL;
+	frame->priv->recovery_source_id = 0;
+	frame->priv->has_handle         = FALSE;
+
+	g_signal_connect (frame, "destroy",
+			  G_CALLBACK (mate_panel_applet_frame_destroyed), NULL);
 }
 
 static void
@@ -702,7 +854,6 @@ mate_panel_applet_frame_reload_response (GtkWidget        *dialog,
 	g_return_if_fail (PANEL_IS_APPLET_FRAME (frame));
 
 	if (!frame->priv->iid || !frame->priv->panel) {
-		g_object_unref (frame);
 		gtk_widget_destroy (dialog);
 		return;
 	}
@@ -710,42 +861,42 @@ mate_panel_applet_frame_reload_response (GtkWidget        *dialog,
 	info = frame->priv->applet_info;
 
 	if (response == PANEL_RESPONSE_RELOAD) {
-		PanelWidget *panel;
-		char        *iid;
-		char        *id = NULL;
-		int          position = -1;
-		gboolean     locked = FALSE;
-
-		panel = frame->priv->panel;
-		iid   = g_strdup (frame->priv->iid);
-
+		/* 用户手动重试：重置崩溃计数，给予新一轮自动恢复机会。
+		 * 若很快再次崩溃，会重新计数并在达到上限后再次提示用户，
+		 * 而不是无限重启。 */
 		if (info) {
-			id = g_strdup (info->id);
-			position  = mate_panel_applet_get_position (info);
-			locked = panel_widget_get_applet_locked (panel, info->widget);
-			mate_panel_applet_clean (info);
+			g_message ("panel-applet: '%s' (id=%s) user chose reload",
+				   frame->priv->iid, info->id);
+			reset_recovery_state (info->id);
 		}
 
-		mate_panel_applet_frame_load (iid, panel, locked,
-					 position, TRUE, id);
-
-		g_free (iid);
-		g_free (id);
-
+		mate_panel_applet_frame_reload (frame);
+	} else if (response == PANEL_RESPONSE_DONT_RELOAD) {
+		/* 用户选择“不再自动恢复”：加入本次会话的禁重载列表，
+		 * mate_panel_applet_frame_load() 会据此拒绝再次加载该插件 */
+		if (info) {
+			g_message ("panel-applet: '%s' (id=%s) user chose don't reload this session",
+				   frame->priv->iid, info->id);
+			no_reload_applets = g_slist_prepend (no_reload_applets,
+							     g_strdup (info->id));
+		}
 	} else if (response == PANEL_RESPONSE_DELETE) {
 		/* if we can't write to applets list we can't really delete
 		   it, so we'll just ignore this.  FIXME: handle this
 		   more correctly I suppose. */
-		if (panel_profile_id_lists_are_writable () && info)
+		if (panel_profile_id_lists_are_writable () && info) {
+			g_message ("panel-applet: '%s' (id=%s) user chose delete",
+				   frame->priv->iid, info->id);
 			panel_profile_delete_object (info);
+		}
 	}
 
-	g_object_unref (frame);
 	gtk_widget_destroy (dialog);
 }
 
-void
-_mate_panel_applet_frame_applet_broken (MatePanelAppletFrame *frame)
+/* 反复崩溃后复用的提示弹窗：提供“重试 / 不再自动恢复”（可写配置时含删除） */
+static void
+mate_panel_applet_frame_show_crash_dialog (MatePanelAppletFrame *frame)
 {
 	GtkWidget  *dialog;
 	GdkScreen  *screen;
@@ -753,9 +904,6 @@ _mate_panel_applet_frame_applet_broken (MatePanelAppletFrame *frame)
 	char       *dialog_txt;
 
 	screen = gtk_widget_get_screen (GTK_WIDGET (frame));
-
-	if (xstuff_is_display_dead ())
-		return;
 
 	if (frame->priv->iid) {
 		MatePanelAppletInfo *info;
@@ -774,8 +922,9 @@ _mate_panel_applet_frame_applet_broken (MatePanelAppletFrame *frame)
 					 dialog_txt, applet_name ? applet_name : NULL);
 
 	gtk_message_dialog_format_secondary_text (GTK_MESSAGE_DIALOG (dialog),
-						  _("If you reload a panel object, it will automatically "
-						    "be added back to the panel."));
+						  _("This panel object has quit unexpectedly "
+						    "several times. If you reload a panel object, "
+						    "it will automatically be added back to the panel."));
 
 	gtk_container_set_border_width (GTK_CONTAINER (dialog), 6);
 
@@ -797,9 +946,11 @@ _mate_panel_applet_frame_applet_broken (MatePanelAppletFrame *frame)
 
 	gtk_window_set_screen (GTK_WINDOW (dialog), screen);
 
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (mate_panel_applet_frame_reload_response),
-			  g_object_ref (frame));
+	g_signal_connect_data (dialog, "response",
+			       G_CALLBACK (mate_panel_applet_frame_reload_response),
+			       g_object_ref (frame),
+			       (GClosureNotify) g_object_unref,
+			       0);
 
 	panel_widget_register_open_dialog (frame->priv->panel, dialog);
 	gtk_window_set_urgency_hint (GTK_WINDOW (dialog), TRUE);
@@ -812,6 +963,68 @@ _mate_panel_applet_frame_applet_broken (MatePanelAppletFrame *frame)
 				      gdk_x11_get_server_time (gtk_widget_get_window (GTK_WIDGET (dialog))));
 
 	g_free (dialog_txt);
+}
+
+/* 插件意外退出（GtkSocket plug-removed）的统一入口：
+ *  - 会话正在结束或显示已断开时不做任何恢复；
+ *  - 首次/少量崩溃：静默在原位置重启，用户无感知；
+ *  - 短时间内反复崩溃：停止自动重启并弹出提示，交由用户选择。 */
+void
+_mate_panel_applet_frame_applet_broken (MatePanelAppletFrame *frame)
+{
+	AppletRecoveryState *state;
+	const char          *id;
+	gint64               now;
+
+	/* 注销/关机过程中插件退出属正常现象，不触发任何恢复 */
+	if (xstuff_is_display_dead ())
+		return;
+
+	if (panel_session_is_quitting ())
+		return;
+
+	if (!frame->priv->applet_info || !frame->priv->panel)
+		return;
+
+	id = frame->priv->applet_info->id;
+	state = get_recovery_state (id);
+	if (!state)
+		return;
+
+	/* 距上次崩溃超过时间窗则重新计数 */
+	now = g_get_monotonic_time ();
+	if (state->last_crash == 0 ||
+	    now - state->last_crash > APPLET_RECOVERY_WINDOW_USEC)
+		state->crashes = 0;
+
+	g_warning ("panel-applet: %s crashed: time=%" G_GINT64_FORMAT
+		   ", last crash time=%" G_GINT64_FORMAT ", count=%u/%u",
+		   id, now, state->last_crash,
+		   state->crashes + 1, APPLET_RECOVERY_MAX_CRASHES);
+
+	state->last_crash = now;
+	state->crashes++;
+
+	if (state->crashes <= APPLET_RECOVERY_MAX_CRASHES) {
+		/* 静默原位恢复：通过定时器延迟执行，避免紧循环重启，
+		 * 同时保证面板主循环的响应性。 */
+		if (frame->priv->recovery_source_id == 0) {
+			g_message ("panel-applet: %s silent recovery, auto-restart in %d ms",
+				   id, APPLET_RECOVERY_RESTART_DELAY_MS);
+			frame->priv->recovery_source_id =
+				g_timeout_add_full (G_PRIORITY_DEFAULT,
+						    APPLET_RECOVERY_RESTART_DELAY_MS,
+						    mate_panel_applet_frame_recovery_timeout,
+						    g_object_ref (frame),
+						    (GDestroyNotify) g_object_unref);
+		}
+		return;
+	}
+
+	/* 插件持续崩溃：停止静默重启，交由用户决定是否继续尝试 */
+	g_message ("panel-applet: %s exceeded max silent crashes (%u), showing prompt dialog",
+		   id, APPLET_RECOVERY_MAX_CRASHES);
+	mate_panel_applet_frame_show_crash_dialog (frame);
 }
 
 void
@@ -856,8 +1069,6 @@ _mate_panel_applet_frame_applet_lock (MatePanelAppletFrame *frame,
 }
 
 /* Generic methods */
-
-static GSList *no_reload_applets = NULL;
 
 enum {
 	LOADING_FAILED_RESPONSE_DONT_DELETE,
@@ -921,10 +1132,12 @@ mate_panel_applet_frame_activating_set_tries   (MatePanelAppletFrameActivating *
 
 
 static void
-mate_panel_applet_frame_loading_failed_response (GtkWidget *dialog,
-					    guint      response,
-					    char      *id)
+mate_panel_applet_frame_loading_failed_response (GtkWidget  *dialog,
+					    guint       response,
+					    const char *id)
 {
+	char *local_id = g_strdup (id);
+
 	gtk_widget_destroy (dialog);
 
 	if (response == LOADING_FAILED_RESPONSE_DELETE &&
@@ -932,7 +1145,7 @@ mate_panel_applet_frame_loading_failed_response (GtkWidget *dialog,
 	    panel_profile_id_lists_are_writable ()) {
 		GSList *item;
 
-		item = g_slist_find_custom (no_reload_applets, id,
+		item = g_slist_find_custom (no_reload_applets, local_id,
 					    (GCompareFunc) strcmp);
 		if (item) {
 			g_free (item->data);
@@ -940,10 +1153,10 @@ mate_panel_applet_frame_loading_failed_response (GtkWidget *dialog,
 								 item);
 		}
 
-		panel_profile_remove_from_list (PANEL_GSETTINGS_OBJECTS, id);
+		panel_profile_remove_from_list (PANEL_GSETTINGS_OBJECTS, local_id);
 	}
 
-	g_free (id);
+	g_free (local_id);
 }
 
 static void
@@ -991,9 +1204,11 @@ mate_panel_applet_frame_loading_failed (const char  *iid,
 	gtk_window_set_screen (GTK_WINDOW (dialog),
 			       gtk_window_get_screen (GTK_WINDOW (panel->toplevel)));
 
-	g_signal_connect (dialog, "response",
-			  G_CALLBACK (mate_panel_applet_frame_loading_failed_response),
-			  g_strdup (id));
+	g_signal_connect_data (dialog, "response",
+			       G_CALLBACK (mate_panel_applet_frame_loading_failed_response),
+			       g_strdup (id),
+			       (GClosureNotify) g_free,
+			       0);
 
 	panel_widget_register_open_dialog (panel, dialog);
 	gtk_window_set_urgency_hint (GTK_WINDOW (dialog), TRUE);

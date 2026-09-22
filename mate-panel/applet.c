@@ -142,9 +142,8 @@ move_applet_callback (GtkWidget *widget, AppletInfo *info)
 					GDK_CURRENT_TIME);
 }
 
-/* permanently remove an applet - all non-permanent
- * cleanups should go in mate_panel_applet_destroy()
- */
+/* 仅销毁插件的控件：崩溃自动重载复用此函数，因此必须保留其崩溃恢复状态。
+ * 永久移除插件请用 mate_panel_applet_remove()。 */
 void
 mate_panel_applet_clean (AppletInfo *info)
 {
@@ -159,6 +158,22 @@ mate_panel_applet_clean (AppletInfo *info)
 		info->widget = NULL;
 		gtk_widget_destroy (widget);
 	}
+}
+
+/* 永久移除指定 id 的插件：按 id 清理崩溃恢复状态，再销毁控件（若存在）。
+ * 即使 AppletInfo 不存在（如加载失败后又被删除）也要清理恢复状态。 */
+void
+mate_panel_applet_remove (const char *id)
+{
+	AppletInfo *info;
+
+	g_return_if_fail (id != NULL);
+
+	_mate_panel_applet_frame_forget_recovery (id);
+
+	info = mate_panel_applet_get_by_id (id);
+	if (info)
+		mate_panel_applet_clean (info);
 }
 
 static void
