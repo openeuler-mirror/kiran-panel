@@ -31,11 +31,14 @@
 #include "panel-session.h"
 
 static gboolean do_not_restart = FALSE;
+static gboolean quitting = FALSE;  /* 面板是否已进入退出流程 */
 
 static void
 panel_session_handle_quit (EggSMClient *client,
 			   gpointer     data)
 {
+	/* 会话管理器要求退出（注销/关机），先标记再真正退出 */
+	quitting = TRUE;
 	panel_shell_quit ();
 }
 
@@ -43,9 +46,17 @@ void
 panel_session_do_not_restart (void)
 {
 	do_not_restart = TRUE;
+	quitting = TRUE;
 
 	if (egg_sm_client_get_mode () != EGG_SM_CLIENT_MODE_DISABLED)
 		egg_sm_client_set_mode (EGG_SM_CLIENT_MODE_NO_RESTART);
+}
+
+/* 返回面板是否正在退出，供插件崩溃恢复逻辑判断是否应停止恢复 */
+gboolean
+panel_session_is_quitting (void)
+{
+	return quitting;
 }
 
 void

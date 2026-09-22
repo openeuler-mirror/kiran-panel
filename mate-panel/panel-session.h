@@ -32,6 +32,10 @@ extern "C" {
 void panel_session_init           (void);
 void panel_session_do_not_restart (void);
 
+/* 面板开始退出（注销/关机/被替换）后返回 TRUE。用于在会话结束阶段
+ * 停止插件的自动崩溃恢复。 */
+gboolean panel_session_is_quitting (void);
+
 #ifdef __cplusplus
 }
 #endif
