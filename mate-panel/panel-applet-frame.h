@@ -138,6 +138,10 @@ char *_mate_panel_applet_frame_get_background_string (MatePanelAppletFrame    *f
 
 void  _mate_panel_applet_frame_applet_broken         (MatePanelAppletFrame *frame);
 
+/* 插件被永久删除（从配置中移除）时清理其崩溃恢复状态。
+ * 恢复状态按 gsettings 对象 id 索引，而 id 在删除后会被回收，需避免残留。 */
+void  _mate_panel_applet_frame_forget_recovery       (const char *id);
+
 void  _mate_panel_applet_frame_applet_remove         (MatePanelAppletFrame *frame);
 void  _mate_panel_applet_frame_applet_move           (MatePanelAppletFrame *frame);
 void  _mate_panel_applet_frame_applet_lock           (MatePanelAppletFrame *frame,

@@ -2389,11 +2389,11 @@ msgstr "“%s”异常退出"
 msgid "Panel object has quit unexpectedly"
 msgstr "面板对象异常退出"
 
-#: ../mate-panel/panel-applet-frame.c:769
+#: ../mate-panel/panel-applet-frame.c:921
 msgid ""
-"If you reload a panel object, it will automatically be added back to the "
-"panel."
-msgstr "如果您重新载入面板对象，将会自动添加到面板中。"
+"This panel object has quit unexpectedly several times. If you reload a panel "
+"object, it will automatically be added back to the panel."
+msgstr "该面板对象已多次意外退出。如果您重新载入面板对象，将会自动添加到面板中。"
 
 #: ../mate-panel/panel-applet-frame.c:776
 msgid "D_elete"
