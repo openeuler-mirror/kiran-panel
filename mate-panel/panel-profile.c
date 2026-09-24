@@ -1301,11 +1301,7 @@ panel_profile_load_object (char *id)
 static void
 panel_profile_destroy_object (const char *id)
 {
-	AppletInfo *info;
-
-	info = mate_panel_applet_get_by_id (id);
-
-	mate_panel_applet_clean (info);
+	mate_panel_applet_remove (id);
 }
 
 static void

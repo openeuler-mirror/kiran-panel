@@ -66,7 +66,11 @@ AppletInfo *mate_panel_applet_get_by_type      (PanelObjectType  object_type, Gd
 
 GSList     *mate_panel_applet_list_applets (void);
 
-void        mate_panel_applet_clean        (AppletInfo    *info);
+/* 仅销毁插件的控件（崩溃自动重载用，保留恢复状态） */
+void        mate_panel_applet_clean  (AppletInfo *info);
+/* 永久移除指定 id 的插件：按 id 清理崩溃恢复状态，并销毁控件（若存在）。
+ * 必须按 id 清理（即使 AppletInfo 尚不存在，例如加载失败后又被删除）。 */
+void        mate_panel_applet_remove (const char *id);
 
 void mate_panel_applet_queue_applet_to_load (const char      *id,
 					PanelObjectType  type,
