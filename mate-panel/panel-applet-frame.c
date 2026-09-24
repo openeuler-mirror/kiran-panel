@@ -176,6 +176,7 @@ struct _MatePanelAppletFramePrivate {
 	guint            recovery_source_id;  /* 待执行的崩溃恢复定时器 id，0 表示无 */
 
 	guint            has_handle : 1;
+	guint            lockdown_notify_added : 1;  /* 是否已注册 lockdown 通知 */
 };
 
 /* 在原位置重新加载插件：先销毁旧 frame（保留 id/位置/锁定状态），
@@ -568,8 +569,13 @@ mate_panel_applet_frame_finalize (GObject *object)
 
 	mate_panel_applets_manager_factory_deactivate (frame->priv->iid);
 
-	panel_lockdown_notify_remove (G_CALLBACK (mate_panel_applet_frame_sync_menu_state),
-				      frame);
+	/* 只有成功激活（注册过 lockdown 通知）的 frame 才需要移除，
+	 * 否则会触发 panel_lockdown_notify_remove() 里的 assert。 */
+	if (frame->priv->lockdown_notify_added) {
+		panel_lockdown_notify_remove (G_CALLBACK (mate_panel_applet_frame_sync_menu_state),
+					      frame);
+		frame->priv->lockdown_notify_added = FALSE;
+	}
 
 	g_free (frame->priv->iid);
 	frame->priv->iid = NULL;
@@ -623,6 +629,7 @@ mate_panel_applet_frame_init (MatePanelAppletFrame *frame)
 	frame->priv->applet_info        = NULL;
 	frame->priv->recovery_source_id = 0;
 	frame->priv->has_handle         = FALSE;
+	frame->priv->lockdown_notify_added = FALSE;
 
 	g_signal_connect (frame, "destroy",
 			  G_CALLBACK (mate_panel_applet_frame_destroyed), NULL);
@@ -760,6 +767,7 @@ _mate_panel_applet_frame_activated (MatePanelAppletFrame           *frame,
 
 	panel_lockdown_notify_add (G_CALLBACK (mate_panel_applet_frame_sync_menu_state),
 				   frame);
+	frame->priv->lockdown_notify_added = TRUE;
 
 	mate_panel_applet_stop_loading (frame_act->id);
 	mate_panel_applet_frame_activating_free (frame_act);
