@@ -154,35 +154,53 @@ static void
 set_applet_constructor_properties (GObject  *applet,
 				   GVariant *props)
 {
-	GVariantIter iter;
-	GVariant    *value;
-	gchar       *key;
+	GVariantIter  iter;
+	GVariant     *value;
+	gchar        *key;
+	GObjectClass *klass;
+
+	klass = G_OBJECT_GET_CLASS (applet);
 
 	g_variant_iter_init (&iter, props);
 	while (g_variant_iter_loop (&iter, "{sv}", &key, &value)) {
-		switch (g_variant_classify (value)) {
-		case G_VARIANT_CLASS_UINT32: {
-			guint32 v = g_variant_get_uint32 (value);
+		GParamSpec *pspec;
+		GValue      gvalue = G_VALUE_INIT;
+		GType       value_type;
 
-			g_object_set (applet, key, v, NULL);
+		pspec = g_object_class_find_property (klass, key);
+		if (pspec == NULL) {
+			g_debug ("Ignoring unknown applet property");
+			continue;
 		}
-			break;
-		case G_VARIANT_CLASS_STRING: {
-			const gchar *v = g_variant_get_string (value, NULL);
 
-			g_object_set (applet, key, v, NULL);
+		if (!(pspec->flags & G_PARAM_WRITABLE) ||
+		    (pspec->flags & G_PARAM_CONSTRUCT_ONLY)) {
+			g_debug ("Ignoring non-writable applet property '%s'",
+				 pspec->name);
+			continue;
 		}
-			break;
-		case G_VARIANT_CLASS_BOOLEAN: {
-			gboolean v = g_variant_get_boolean (value);
 
-			g_object_set (applet, key, v, NULL);
+		value_type = G_PARAM_SPEC_VALUE_TYPE (pspec);
+		g_value_init (&gvalue, value_type);
+
+		if (value_type == G_TYPE_UINT &&
+		    g_variant_is_of_type (value, G_VARIANT_TYPE_UINT32)) {
+			g_value_set_uint (&gvalue, g_variant_get_uint32 (value));
+		} else if (value_type == G_TYPE_STRING &&
+			   g_variant_is_of_type (value, G_VARIANT_TYPE_STRING)) {
+			g_value_set_string (&gvalue, g_variant_get_string (value, NULL));
+		} else if (value_type == G_TYPE_BOOLEAN &&
+			   g_variant_is_of_type (value, G_VARIANT_TYPE_BOOLEAN)) {
+			g_value_set_boolean (&gvalue, g_variant_get_boolean (value));
+		} else {
+			g_debug ("Ignoring applet property '%s' with invalid type '%s'",
+				 pspec->name, g_variant_get_type_string (value));
+			g_value_unset (&gvalue);
+			continue;
 		}
-			break;
-		default:
-			g_assert_not_reached ();
-			break;
-		}
+
+		g_object_set_property (applet, key, &gvalue);
+		g_value_unset (&gvalue);
 	}
 }
 
